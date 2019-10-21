@@ -12,16 +12,14 @@
   }
 
   const text = document.querySelector("#text");
-  const counter = document.querySelector("#character-count");
-
-  if (!text) return;
-
-  text.value = "";
+  const charCount = document.querySelector("#character-count");
 
   function handleTextInput() {
-    const trimmedText = text.value.trim();
-    counter.textContent = trimmedText.length;
+    charCount.textContent = text.value.trim().length;
   }
+
+  // Keep character count on refresh
+  handleTextInput();
 
   text.addEventListener("input", handleTextInput, false);
 })();
