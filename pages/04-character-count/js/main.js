@@ -14,12 +14,12 @@
   const text = document.querySelector("#text");
   const charCount = document.querySelector("#character-count");
 
-  function handleTextInput() {
+  function updateCount() {
     charCount.textContent = text.value.trim().length;
   }
 
   // Keep character count on refresh
-  handleTextInput();
+  updateCount();
 
-  text.addEventListener("input", handleTextInput, false);
+  text.addEventListener("input", updateCount, false);
 })();
