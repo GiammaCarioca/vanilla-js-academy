@@ -9,3 +9,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [03. Toggle Passwords in Multiple Forms](https://giammacarioca.github.io/vanilla-js-academy/pages/03-toggle-passwords-in-multiple-forms/js/main.js)
 
 [04. Character Count](https://giammacarioca.github.io/vanilla-js-academy/pages/04-character-count/js/main.js)
+
+[05. Word Count](https://giammacarioca.github.io/vanilla-js-academy/pages/05-word-count/js/main.js)
