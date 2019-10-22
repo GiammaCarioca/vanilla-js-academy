@@ -19,7 +19,7 @@
     charCount.textContent = text.value.length;
     wordCount.textContent = text.value
       .split(/\s+/)
-      .filter(item => item.length > 0).length;
+      .filter(item => item !== "").length;
   }
 
   // Keep character count on refresh
