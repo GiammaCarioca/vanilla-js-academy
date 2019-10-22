@@ -16,10 +16,10 @@
   const charCount = document.querySelector("#character-count");
 
   function updateCount() {
-    charCount.textContent = text.value.trim().length;
+    charCount.textContent = text.value.length;
     wordCount.textContent = text.value
-      .split(" ")
-      .filter(item => item !== "").length;
+      .split(/\s+/)
+      .filter(item => item.length > 0).length;
   }
 
   // Keep character count on refresh
