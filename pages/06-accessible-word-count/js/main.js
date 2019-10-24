@@ -12,8 +12,9 @@
   }
 
   const text = document.querySelector("#text");
-  const wordCount = document.querySelector("#word-count");
+  const count = document.querySelector("#count");
   const charCount = document.querySelector("#character-count");
+  const wordCount = document.querySelector("#word-count");
 
   function updateCount() {
     const chars = text.value.length;
@@ -22,13 +23,8 @@
 
     charCount.textContent = chars;
     wordCount.textContent = words;
-
-    // Speak the dynamic change.
-    speak(`You've written ${words} words and ${chars} characters.`);
+    count.textContent = `You've written ${words} words and ${chars} characters.`;
   }
-
-  // Create div for speak
-  addSpeakContainer();
 
   // Keep character count on refresh
   updateCount();
