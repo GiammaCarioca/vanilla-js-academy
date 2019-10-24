@@ -16,11 +16,19 @@
   const charCount = document.querySelector("#character-count");
 
   function updateCount() {
-    charCount.textContent = text.value.length;
-    wordCount.textContent = text.value
-      .split(/\s+/)
-      .filter(item => item.length > 0).length;
+    const chars = text.value.length;
+    const words = text.value.split(/\s+/).filter(item => item.length > 0)
+      .length;
+
+    charCount.textContent = chars;
+    wordCount.textContent = words;
+
+    // Speak the dynamic change.
+    speak(`You've written ${words} words and ${chars} characters.`);
   }
+
+  // Create div for speak
+  addSpeakContainer();
 
   // Keep character count on refresh
   updateCount();
