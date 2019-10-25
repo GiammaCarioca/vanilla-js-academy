@@ -13,17 +13,13 @@
 
   const text = document.querySelector("#text");
   const count = document.querySelector("#count");
-  const charCount = document.querySelector("#character-count");
-  const wordCount = document.querySelector("#word-count");
 
   function updateCount() {
     const chars = text.value.length;
-    const words = text.value.split(/\s+/).filter(item => item.length > 0)
+    const words = text.value.split(/\s+/).filter(word => word.length > 0)
       .length;
 
-    charCount.textContent = chars;
-    wordCount.textContent = words;
-    count.textContent = `You've written ${words} words and ${chars} characters.`;
+    count.innerHTML = `You've written <strong>${words} words</strong> and <strong>${chars} characters</strong>.`;
   }
 
   // Keep character count on refresh
