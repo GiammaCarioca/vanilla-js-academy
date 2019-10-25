@@ -19,7 +19,7 @@
     const words = text.value.split(/\s+/).filter(word => word.length > 0)
       .length;
 
-    count.innerHTML = `You've written <strong>${words} words</strong> and <strong>${chars} characters</strong>.`;
+    count.textContent = `You've written ${words} words and ${chars} characters.`;
   }
 
   // Keep character count on refresh
