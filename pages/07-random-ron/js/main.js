@@ -14,5 +14,7 @@
       });
   }
 
+  getQuote();
+
   btn.addEventListener("click", getQuote, false);
 })();
