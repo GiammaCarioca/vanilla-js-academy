@@ -13,3 +13,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [05. Character and Word Count](https://giammacarioca.github.io/vanilla-js-academy/pages/05-word-count/js/main.js)
 
 [06. Announcing the Count](https://giammacarioca.github.io/vanilla-js-academy/pages/06-accessible-word-count/js/main.js)
+
+[07. Random Ron](https://giammacarioca.github.io/vanilla-js-academy/pages/07-random-ron/js/main.js)
