@@ -3,7 +3,7 @@
 
   const btn = document.querySelector("button");
   const blockquote = document.querySelector("blockquote");
-  const endPoint = "https://ron-swanson-quotes.herokuapp.com/2/quotes";
+  const endPoint = "https://ron-swanson-quotes.herokuapp.com/v2/quotes";
 
   function fetchQuote() {
     fetch(endPoint)
