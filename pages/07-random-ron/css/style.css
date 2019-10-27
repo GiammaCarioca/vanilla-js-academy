@@ -4,12 +4,10 @@ body {
   width: 88%;
 }
 
-label {
-  display: block;
-  width: 100%;
+blockquote[data-error="true"] {
+  color: red;
 }
 
-textarea {
-  min-height: 24em;
-  width: 100%;
+blockquote[data-error="false"] {
+  color: black;
 }
