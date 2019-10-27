@@ -3,12 +3,9 @@
 
   const btn = document.querySelector("button");
   const blockquote = document.querySelector("blockquote");
-  const endPoint = "https://ron-swanson-quotes.herokuapp.com/v2/quotes";
+  const endPoint = "https://ron-swanson-quotes.herokuapp.com/2/quotes";
 
   function fetchQuote() {
-    blockquote.setAttribute("data-error", "false");
-    blockquote.textContent = "LOADING...";
-
     fetch(endPoint)
       .then(function(response) {
         if (response.ok) {
@@ -23,8 +20,9 @@
       .catch(function(error) {
         console.warn("Error:", error.status, error.statusText);
         blockquote.setAttribute("data-error", "true");
+
         blockquote.textContent =
-          "Sorry, something went wrong. Please try again later.";
+          "To quote Ron: 'I like saying no. It lowers their enthusiasm'. Seriously though, something actually went wrong. Please try again.";
       });
   }
 

@@ -11,3 +11,8 @@ blockquote[data-error="true"] {
 blockquote[data-error="false"] {
   color: black;
 }
+
+button:active {
+  background-color: gray;
+  color: white;
+}
