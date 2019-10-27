@@ -1,11 +1,17 @@
 (function() {
   "use strict";
 
-  const btn = document.querySelector("button");
-  const blockquote = document.querySelector("blockquote");
+  const quote = document.querySelector("#quote");
+  const btn = document.querySelector("#getQuote");
   const endPoint = "https://ron-swanson-quotes.herokuapp.com/v2/quotes";
+  const image = document.querySelector("#imgRon");
 
-  function fetchQuote() {
+  function changeImage() {
+    image.setAttribute("src", "../../assets/ron.gif");
+    image.setAttribute("alt", "Ron Swanson slipping");
+  }
+
+  function getQuote() {
     fetch(endPoint)
       .then(function(response) {
         if (response.ok) {
@@ -15,18 +21,18 @@
         }
       })
       .then(function(data) {
-        blockquote.textContent = data;
+        quote.textContent = data[0];
       })
       .catch(function(error) {
         console.warn("Error:", error.status, error.statusText);
-        blockquote.setAttribute("data-error", "true");
+        quote.setAttribute("data-error", "true");
+        quote.textContent = "Something went wrong. Please try again.";
 
-        blockquote.textContent =
-          "To quote Ron: 'I like saying no. It lowers their enthusiasm'. Seriously though, something actually went wrong. Please try again.";
+        changeImage();
       });
   }
 
-  fetchQuote();
+  getQuote();
 
-  btn.addEventListener("click", fetchQuote, false);
+  btn.addEventListener("click", getQuote, false);
 })();

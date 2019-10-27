@@ -10,9 +10,17 @@
   <body>
     <h1>Random Ron</h1>
 
-    <blockquote aria-live="polite" tabindex="0">LOADING...</blockquote>
+    <img
+      id="imgRon"
+      alt="A photo of Ron Swanson"
+      src="http://giphygifs.s3.amazonaws.com/media/6nGE3BmUlhs3e/giphy.gif"
+    />
 
-    <button>Show Another Quote</button>
+    <blockquote id="quote" aria-live="polite" tabindex="0">
+      <em>Loading...</em>
+    </blockquote>
+
+    <button id="getQuote">Show Another Quote</button>
 
     <p>
       <a
