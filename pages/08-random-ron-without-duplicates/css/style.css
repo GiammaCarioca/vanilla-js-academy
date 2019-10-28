@@ -1,0 +1,18 @@
+body {
+  margin: 1em auto;
+  max-width: 40em;
+  width: 88%;
+}
+
+blockquote[data-error="true"] {
+  color: red;
+}
+
+blockquote[data-error="false"] {
+  color: black;
+}
+
+button:active {
+  background-color: gray;
+  color: white;
+}
