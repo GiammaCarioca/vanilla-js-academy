@@ -6,12 +6,7 @@
   const endPoint = "https://ron-swanson-quotes.herokuapp.com/v2/quotes";
   const image = document.querySelector("#imgRon");
 
-  const allQuotes = [];
-
-  function changeImage() {
-    image.setAttribute("src", "../../assets/ron.gif");
-    image.setAttribute("alt", "Ron Swanson slipping");
-  }
+  const quotes = [];
 
   function getQuote() {
     fetch(endPoint)
@@ -23,20 +18,21 @@
         }
       })
       .then(function(data) {
-        if (allQuotes.length <= 50) {
-          if (allQuotes.indexOf(data[0]) !== -1) {
-            getQuote();
-          } else {
-            quote.textContent = data[0];
-            allQuotes.push(data[0]);
-          }
-        } else {
-          quote.textContent = data[0];
-          allQuotes.push(data[0]);
+        const currentQuote = data[0];
+
+        if (quotes.indexOf(currentQuote) > -1) {
+          getQuote();
+          return;
+        }
+
+        quote.textContent = currentQuote;
+        quotes.push(currentQuote);
+
+        if (quotes.length > 50) {
+          quotes = [];
         }
       })
       .catch(function(error) {
-        console.warn("Error:", error.status, error.statusText);
         quote.setAttribute("data-error", "true");
         quote.textContent = "Something went wrong. Please try again.";
 
@@ -45,6 +41,11 @@
   }
 
   getQuote();
+
+  function changeImage() {
+    image.setAttribute("src", "../../assets/ron.gif");
+    image.setAttribute("alt", "Ron Swanson slipping");
+  }
 
   btn.addEventListener("click", getQuote, false);
 })();
