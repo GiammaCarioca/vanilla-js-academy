@@ -16,4 +16,6 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 
 [07. Random Ron](https://giammacarioca.github.io/vanilla-js-academy/pages/07-random-ron/js/main.js)
 
-[08. Random Ron Without Duplicates](https://giammacarioca.github.io/vanilla-js-academy/pages/07-random-ron-without-duplicates/js/main.js)
+[08. Random Ron Without Duplicates](https://giammacarioca.github.io/vanilla-js-academy/pages/08-random-ron-without-duplicates/js/main.js)
+
+[09. What to read today](https://giammacarioca.github.io/vanilla-js-academy/pages/09-nyt-top-stories/js/main.js)

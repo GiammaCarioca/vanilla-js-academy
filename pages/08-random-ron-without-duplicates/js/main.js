@@ -21,8 +21,7 @@
         const currentQuote = data[0];
 
         if (quotes.indexOf(currentQuote) > -1) {
-          getQuote();
-          return;
+          return getQuote();
         }
 
         quote.textContent = currentQuote;
