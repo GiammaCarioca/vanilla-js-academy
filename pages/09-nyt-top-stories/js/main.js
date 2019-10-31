@@ -7,14 +7,16 @@
 
   const render = function(articles) {
     app.innerHTML = articles
-      .map(
-        article => `<article>
-          <h2><a href="${article.url}">${article.title}</a></h2>
-          <p>${article.byline}</p>
-          <p>${article.abstract}</p>
-          <img src="${article.multimedia[3].url}" alt="${article.multimedia[3].caption}"/>
-        </article>`
-      )
+      .map(article => {
+        return `
+        <article>
+        <h2><a href="${article.url}">${article.title}</a></h2>
+        <p>${article.byline}</p>
+        <p>${article.abstract}</p>
+        <img src="${article.multimedia[0].url}" src="${article.multimedia[0].caption}" />
+      </article>
+      `;
+      })
       .join("");
   };
 
