@@ -13,7 +13,9 @@
         <h2><a href="${article.url}">${article.title}</a></h2>
         <p>${article.byline}</p>
         <p>${article.abstract}</p>
-        <img src="${article.multimedia[0].url}" src="${article.multimedia[0].caption}" />
+        <img src="${decodeURIComponent(
+          article.multimedia[0].url
+        )}" alt="${decodeURIComponent(article.multimedia[0].caption)}"/>
       </article>
       `;
       })
