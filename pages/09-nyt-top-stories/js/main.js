@@ -2,9 +2,21 @@
   "use strict";
 
   const app = document.querySelector("#app");
+  const apiKey = "cGKSCRZuXhcpv5wX59icpRRFGAqG4Mg8";
+  const endpoint = `https://api.nytimes.com/svc/topstories/v2/science.json?api-key=${apiKey}`;
 
-  const endpoint =
-    "https://api.nytimes.com/svc/topstories/v2/fashion.json?api-key=cGKSCRZuXhcpv5wX59icpRRFGAqG4Mg8";
+  const render = function(articles) {
+    app.innerHTML = articles
+      .map(
+        article => `<article>
+          <h2><a href="${article.url}">${article.title}</a></h2>
+          <p>${article.byline}</p>
+          <p>${article.abstract}</p>
+          <img src="${article.multimedia[3].url}" alt="${article.multimedia[3].caption}"/>
+        </article>`
+      )
+      .join("");
+  };
 
   fetch(endpoint)
     .then(function(response) {
@@ -14,16 +26,9 @@
       return Promise.reject(response);
     })
     .then(function(data) {
-      console.log(data);
-      app.innerHTML = renderStories(data.results);
+      render(data.results);
     })
-    .catch(function(err) {
-      console.log(err);
+    .catch(function(error) {
+      console.log("Something went wrong:", error);
     });
-
-  const renderStories = function(stories) {
-    return stories
-      .map(story => `<h2><a href="${story.url}">${story.title}</a></h2>`)
-      .join("");
-  };
 })();
