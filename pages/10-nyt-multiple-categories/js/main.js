@@ -5,59 +5,48 @@
 	const apiKey = 'cGKSCRZuXhcpv5wX59icpRRFGAqG4Mg8';
 	const categories = ['arts', 'fashion', 'movies'];
 
-	function createSection(top5) {
-		return top5
+	function getJSON(response) {
+		if (response.ok) return response.json();
+		return Promise.reject(response);
+	}
+
+	function getTopStories(articles, num) {
+		const topStories = articles.slice(0, num);
+		return topStories;
+	}
+
+	function buildArticle(topStories) {
+		return topStories
 			.map(
-				article => `
+				story => `
 				<article>
-          <h2><a href="${article.url}">${article.title}</a></h2>
-            <p>${article.byline}</p>
-            <p>${article.abstract}</p>
-            <img src="${article.multimedia[3].url}" alt="${article.multimedia[3].caption}"/>
+          <h2><a href="${story.url}">${story.title}</a></h2>
+            <p>${story.byline}</p>
+            <p>${story.abstract}</p>
+            <img src="${story.multimedia[3].url}" alt="${story.multimedia[3].caption}"/>
 				</article>
 				`
 			)
 			.join('');
 	}
 
-	function getTop5(articles) {
-		const top5 = articles.slice(0, 5);
-		return top5;
+	function renderApp(HTMLString) {
+		app.innerHTML += HTMLString;
+		return app;
 	}
 
-	categories.map(category =>
+	categories.forEach(category =>
 		fetch(
 			`https://api.nytimes.com/svc/topstories/v2/${category}.json?api-key=${apiKey}`
 		)
-			.then(function(response) {
-				if (response.ok) return response.json();
-				return Promise.reject(response);
-			})
-			.then(function(data) {
-				// console.log(data.results);
-				return data.results;
-			})
-			.then(function(articles) {
-				// Get only 5 articles
-				return getTop5(articles);
-			})
-			.then(function(top5) {
-				// console.log(category, top5);
-				return createSection(top5);
-			})
+			.then(response => getJSON(response))
+			.then(data => data.results)
+			.then(articles => getTopStories(articles, 5))
+			.then(topStories => buildArticle(topStories))
 			.then(function(section) {
-				// console.log(section);
-				return `<section><h2>${category.toUpperCase()}</h2>${section}</section>`;
+				return `<section><h2>${category}</h2>${section}</section>`;
 			})
-			.then(function(HTMLString) {
-				console.log(HTMLString);
-				app.innerHTML += HTMLString;
-				return app;
-			})
-			.catch(function(error) {
-				console.log('Something went wrong:', error);
-			})
+			.then(HTMLString => renderApp(HTMLString))
+			.catch(error => console.log('Something went wrong:', error))
 	);
 })();
-
-console.log(categories);
