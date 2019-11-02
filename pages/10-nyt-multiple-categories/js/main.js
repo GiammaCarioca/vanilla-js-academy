@@ -29,8 +29,7 @@
 				`
 			)
 			.join('');
-		const sectionTitle = section.toUpperCase();
-		const HTMLString = `<section><h2>${sectionTitle}</h2>${articles}</section>`;
+		const HTMLString = `<section><h2>${section}</h2>${articles}</section>`;
 		return HTMLString;
 	}
 
