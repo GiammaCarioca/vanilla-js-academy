@@ -15,12 +15,12 @@
 		return topStories;
 	}
 
-	function buildArticle(topStories) {
-		return topStories
+	function buildSection({ category, topStories }) {
+		const articles = topStories
 			.map(
 				story => `
 				<article>
-          <h2><a href="${story.url}">${story.title}</a></h2>
+          <h3><a href="${story.url}">${story.title}</a></h3>
             <p>${story.byline}</p>
             <p>${story.abstract}</p>
             <img src="${story.multimedia[3].url}" alt="${story.multimedia[3].caption}"/>
@@ -28,6 +28,9 @@
 				`
 			)
 			.join('');
+		const section = category.toUpperCase();
+		const htmlString = `<section><h2>${section}</h2>${articles}</section>`;
+		return htmlString;
 	}
 
 	function renderApp(HTMLString) {
@@ -40,12 +43,9 @@
 			`https://api.nytimes.com/svc/topstories/v2/${category}.json?api-key=${apiKey}`
 		)
 			.then(response => getJSON(response))
-			.then(data => data.results)
+			.then(({ results }) => results)
 			.then(articles => getTopStories(articles, 5))
-			.then(topStories => buildArticle(topStories))
-			.then(function(section) {
-				return `<section><h2>${category}</h2>${section}</section>`;
-			})
+			.then(topStories => buildSection({ category, topStories }))
 			.then(HTMLString => renderApp(HTMLString))
 			.catch(error => console.log('Something went wrong:', error))
 	);
