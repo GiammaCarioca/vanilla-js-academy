@@ -28,9 +28,9 @@
 				`
 			)
 			.join('');
-		const section = category.toUpperCase();
-		const htmlString = `<section><h2>${section}</h2>${articles}</section>`;
-		return htmlString;
+		const sectionTitle = category.toUpperCase();
+		const HTMLString = `<section><h2>${sectionTitle}</h2>${articles}</section>`;
+		return HTMLString;
 	}
 
 	function renderApp(HTMLString) {
