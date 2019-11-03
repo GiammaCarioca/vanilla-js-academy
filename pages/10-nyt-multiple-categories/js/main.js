@@ -42,11 +42,11 @@
 		fetch(
 			`https://api.nytimes.com/svc/topstories/v2/${section}.json?api-key=${apiKey}`
 		)
-			.then(response => getJSON(response))
+			.then(getJSON)
 			.then(({ results }) => results)
 			.then(articles => getTopStories(articles, numOfArticles))
 			.then(topStories => buildSection({ section, topStories }))
-			.then(HTMLString => renderApp(HTMLString))
+			.then(renderApp)
 			.catch(error => console.log('Something went wrong:', error))
 	);
 })();
