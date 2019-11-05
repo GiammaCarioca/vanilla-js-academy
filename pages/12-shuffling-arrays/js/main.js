@@ -42,7 +42,7 @@ const grid = document.querySelector('.row');
 function createGridItems(monsters) {
 	shuffle(monsters);
 	return monsters.map(
-		monster => `<img src="/assets/svg/${monster}.svg" alt="${monster}">`
+		monster => `<img src="./assets/svg/${monster}.svg" alt="${monster}">`
 	);
 }
 
