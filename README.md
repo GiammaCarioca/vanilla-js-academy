@@ -23,3 +23,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [10. What To Read Today - Multiple Sections](https://giammacarioca.github.io/vanilla-js-academy/pages/10-nyt-multiple-categories/js/main.js)
 
 [11. Sanitizing the NYT API Data](https://giammacarioca.github.io/vanilla-js-academy/pages/11-sanitizing-data/js/main.js)
+
+[12. Monster Shuffle](https://giammacarioca.github.io/vanilla-js-academy/pages/12-shuffling-arrays/js/main.js)
