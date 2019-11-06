@@ -24,4 +24,4 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 
 [11. Sanitizing the NYT API Data](https://giammacarioca.github.io/vanilla-js-academy/pages/11-sanitizing-data/js/main.js)
 
-[12. Monster Shuffle](https://giammacarioca.github.io/vanilla-js-academy/pages/12-shuffling-arrays/js/main.js)
+[12. Monster Shuffle](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/12-shuffling-arrays/js/main.js)
