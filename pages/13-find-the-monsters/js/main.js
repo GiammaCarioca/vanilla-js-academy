@@ -17,7 +17,6 @@
 		'sock'
 	]
 
-	// Get the #app element
 	const app = document.querySelector('#app')
 
 	/**
@@ -42,24 +41,35 @@
 		return array
 	}
 
-	// Shuffle the monsters array
-	shuffle(monsters)
+	function createCells(monsters) {
+		return monsters.map(
+			monster => `<img src="assets/svg/${monster}.svg" alt="${monster}">`
+		)
+	}
 
-	// Create the HTML and inject it into the DOM
-	app.innerHTML =
-		'<div class="row">' +
-		monsters
-			.map(function(monster) {
-				const html =
-					'<div class="grid">' +
-					'<img alt="' +
-					monster +
-					'" src="./assets/svg/' +
-					monster +
-					'.svg">' +
-					'</div>'
-				return html
-			})
-			.join('') +
-		'</div>'
+	function buildGrid() {
+		const cells = createCells(monsters)
+		return (
+			`<div class="row">` +
+			shuffle(cells)
+				.map(item => `<div class="grid">${item}</div>`)
+				.join('') +
+			`</div>`
+		)
+	}
+
+	function renderGrid() {
+		app.innerHTML = buildGrid()
+	}
+
+	renderGrid()
+
+	document.addEventListener(
+		'click',
+		function(e) {
+			if (!e.target.matches('img')) return
+			console.log('clicked')
+		},
+		false
+	)
 })()
