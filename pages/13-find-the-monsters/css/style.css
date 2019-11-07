@@ -3,6 +3,7 @@ body {
 	max-width: 40em;
 	width: 88%;
 }
+
 /**
  * A simple grid layout
  */
@@ -15,10 +16,18 @@ body {
 	min-height: 6em;
 	padding: 1em;
 }
+
 /**
  * Make sure images scale
  */
 img {
 	height: auto;
 	max-width: 100%;
+}
+
+button {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
 }

@@ -42,19 +42,18 @@
 	}
 
 	function revealCard(e) {
-		const card = e.target
-		const monster = e.target.dataset.card
+		const button = e.target.closest('button')
+		const img = button.firstElementChild
 
-		if (!card.matches('img')) return
-		card.src = `./assets/svg/${monster}.svg`
-		card.alt = monster
+		img.src = `./assets/svg/${img.dataset.card}.svg`
+		img.alt = `${img.dataset.card}`
 	}
 
 	function createCells(monsters) {
 		const door = 'door'
 		return monsters.map(
 			monster =>
-				`<img src="assets/svg/${door}.svg" alt="${door}" data-card="${monster}">`
+				`<button type="button"><img src="assets/svg/${door}.svg" alt="${door}" data-card="${monster}"  ></button>`
 		)
 	}
 
@@ -63,7 +62,7 @@
 		return (
 			`<div class="row">` +
 			shuffle(cells)
-				.map(item => `<div class="grid">${item}</div>`)
+				.map(item => `<div class="grid" >${item}</div>`)
 				.join('') +
 			`</div>`
 		)
@@ -75,5 +74,5 @@
 
 	renderGrid()
 
-	document.addEventListener('click', e => revealCard(e), false)
+	document.addEventListener('click', revealCard, false)
 })()
