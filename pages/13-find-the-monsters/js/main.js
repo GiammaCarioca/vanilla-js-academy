@@ -1,23 +1,27 @@
 ;(function() {
 	'use strict'
 
-	// The monsters and socks
-	const monsters = [
-		'monster1',
-		'monster2',
-		'monster3',
-		'monster4',
-		'monster5',
-		'monster6',
-		'monster7',
-		'monster8',
-		'monster9',
-		'monster10',
-		'monster11',
-		'sock'
-	]
-
-	const app = document.querySelector('#app')
+	/**
+	 * Element.closest() polyfill
+	 * https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+	 */
+	if (!Element.prototype.closest) {
+		if (!Element.prototype.matches) {
+			Element.prototype.matches =
+				Element.prototype.msMatchesSelector ||
+				Element.prototype.webkitMatchesSelector
+		}
+		Element.prototype.closest = function(s) {
+			var el = this
+			var ancestor = this
+			if (!document.documentElement.contains(el)) return null
+			do {
+				if (ancestor.matches(s)) return ancestor
+				ancestor = ancestor.parentElement
+			} while (ancestor !== null)
+			return null
+		}
+	}
 
 	/**
 	 * Randomly shuffle an array
@@ -40,6 +44,24 @@
 		}
 		return array
 	}
+
+	// The monsters and socks
+	const monsters = [
+		'monster1',
+		'monster2',
+		'monster3',
+		'monster4',
+		'monster5',
+		'monster6',
+		'monster7',
+		'monster8',
+		'monster9',
+		'monster10',
+		'monster11',
+		'sock'
+	]
+
+	const app = document.querySelector('#app')
 
 	function revealCard(e) {
 		const button = e.target.closest('button')
