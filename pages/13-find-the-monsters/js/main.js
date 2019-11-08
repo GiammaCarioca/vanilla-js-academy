@@ -63,32 +63,31 @@
 
 	const app = document.querySelector('#app')
 
-	function revealCard(e) {
+	function handleClick(e) {
 		const button = e.target.closest('button')
 
 		if (!button) return
-		const img = button.firstElementChild
+		const index = button.getAttribute('data-monster-id')
 
-		img.src = `./assets/svg/${img.dataset.card}.svg`
-		img.alt = `${img.dataset.card}`
+		button.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
 	}
 
 	function createCells(monsters) {
-		const door = 'door'
 		return monsters.map(
-			monster =>
-				`<button type="button"><img src="assets/svg/${door}.svg" alt="${door}" data-card="${monster}"  ></button>`
+			(_, index) =>
+				`<button type="button" data-monster-id="${index}"><img src="assets/svg/door.svg" alt="Click the door to see what\'s behind it"></button>`
 		)
 	}
 
 	function buildGrid() {
 		const cells = createCells(monsters)
 		return (
-			`<div class="row">` +
+			'<p>Click a door to reveal a monster. Try not to find the sock.</p>' +
+			'<div class="row">' +
 			shuffle(cells)
-				.map(item => `<div class="grid" >${item}</div>`)
+				.map(item => `<div class="grid" aria-live="polite">${item}</div>`)
 				.join('') +
-			`</div>`
+			'</div>'
 		)
 	}
 
@@ -98,5 +97,5 @@
 
 	renderGrid()
 
-	document.addEventListener('click', revealCard, false)
+	document.addEventListener('click', handleClick, false)
 })()
