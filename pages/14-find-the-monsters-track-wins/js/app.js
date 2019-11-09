@@ -63,13 +63,29 @@
 
 	const app = document.querySelector('#app')
 
+	function gameOver() {
+		console.log('you lose')
+		const body = document.querySelector('body')
+		const div = document.createElement('div')
+
+		app.closest('#app').remove()
+		body.insertBefore(div, body.childNodes[2])
+		div.textContent = 'Oops, you found a sock!'
+	}
+
 	function handleClick(e) {
-		const button = e.target.closest('data-monster-id')
+		const button = e.target.closest('button')
 
 		if (!button) return
+		const sock = monsters.findIndex(monster => monster === 'sock')
 		const index = button.getAttribute('data-monster-id')
+		console.log(index)
 
-		button.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
+		if (index == sock) {
+			gameOver()
+		} else {
+			button.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
+		}
 	}
 
 	function createCells(monsters) {
