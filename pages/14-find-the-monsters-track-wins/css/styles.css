@@ -25,9 +25,25 @@ img {
 	max-width: 100%;
 }
 
-button {
-	background: none;
-	border: none;
-	padding: 0;
+/**
+ * Scale image to the full width of the page
+ */
+.img-full {
+	width: 100%;
+}
+
+/**
+ * Style monster cards
+ */
+[data-monster-id] {
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
+}
+
+/**
+ * Style reset button
+ */
+.reset {
 	cursor: pointer;
 }

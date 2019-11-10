@@ -68,16 +68,13 @@
 		location.reload()
 	}
 
-	function gameEnd() {
-		const resetButton = document.createElement('button')
-		resetButton.textContent = 'play again'
-		resetButton.setAttribute('id', 'reset')
-		app.insertAdjacentElement('afterend', resetButton)
-
-		app.textContent =
-			monstersFound === monsters.length - 2
-				? 'You won! You found all of the monsters. Congrats!'
-				: 'Oops, you found a sock!'
+	function gameEnd(sock) {
+		return (app.innerHTML = `
+		<img class="img-full" src=${!sock ? 'assets/win.gif' : 'assets/oops.gif'}>
+		<h2>${!sock ? 'You won!' : 'Oops, you found a sock!'}</h2>
+		${!sock ? '<p>You found all of the monsters. Congrats!</p>' : ''}
+		<p><button id="reset">play again</button></p>
+		`)
 	}
 
 	function handleClick(e) {
@@ -90,7 +87,8 @@
 		const index = monster.getAttribute('data-monster-id')
 		const sock = monsters.findIndex(item => item === 'sock')
 
-		if (index == sock || monstersFound === monsters.length - 2) return gameEnd()
+		if (index == sock || monstersFound === monsters.length - 2)
+			return gameEnd(sock)
 
 		monstersFound++
 		monster.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
