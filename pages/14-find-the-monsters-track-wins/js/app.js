@@ -62,6 +62,17 @@
 	]
 
 	const app = document.querySelector('#app')
+	let monstersFound = null
+
+	function youWin() {
+		console.log('you win')
+		const body = document.querySelector('body')
+		const div = document.createElement('div')
+
+		app.closest('#app').remove()
+		body.insertBefore(div, body.childNodes[2])
+		div.textContent = 'You won! You found all of the monsters. Congrats!'
+	}
 
 	function gameOver() {
 		console.log('you lose')
@@ -81,11 +92,13 @@
 		const index = button.getAttribute('data-monster-id')
 		console.log(index)
 
-		if (index == sock) {
-			gameOver()
-		} else {
-			button.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
-		}
+		if (index == sock) return gameOver()
+
+		if (monstersFound === monsters.length - 2) return youWin()
+
+		monstersFound++
+		console.log(monstersFound)
+		button.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
 	}
 
 	function createCells(monsters) {
