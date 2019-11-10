@@ -69,7 +69,10 @@
 		function createCells(monsters) {
 			return monsters.map(
 				(_, index) =>
-					`<button type="button" data-monster-id="${index}"><img src="assets/svg/door.svg" alt="Click the door to see what\'s behind it"></button>`
+					`<button type="button" data-monster-id="${index}">
+						<img src="assets/svg/door.svg"
+						alt="Click the door to see what\'s behind it">
+					</button>`
 			)
 		}
 
@@ -99,13 +102,17 @@
 	}
 
 	function gameEnd() {
+		const img = !hasFoundSock ? 'assets/win.gif' : 'assets/oops.gif'
+		const heading = !hasFoundSock ? 'You won!' : 'Oops, you found a sock!'
+		const text = !hasFoundSock
+			? '<p>You found all of the monsters. Congrats!</p>'
+			: ''
+
 		return (app.innerHTML = `
-		<img class="img-full" src=${
-			!hasFoundSock ? 'assets/win.gif' : 'assets/oops.gif'
-		}>
-		<h2>${!hasFoundSock ? 'You won!' : 'Oops, you found a sock!'}</h2>
-		${!hasFoundSock ? '<p>You found all of the monsters. Congrats!</p>' : ''}
-		<p><button id="reset">play again</button></p>
+		<img class="img-full" src=${img}>
+		<h2>${heading}</h2>
+		${text}
+		<button id="reset">play again</button>
 		`)
 	}
 
