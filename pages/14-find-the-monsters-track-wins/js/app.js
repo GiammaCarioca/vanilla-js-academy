@@ -62,17 +62,20 @@
 	]
 
 	const app = document.querySelector('#app')
+	let hasFoundSock = false
 	let monstersFound = null
 
 	function reset() {
 		location.reload()
 	}
 
-	function gameEnd(sock) {
+	function gameEnd() {
 		return (app.innerHTML = `
-		<img class="img-full" src=${!sock ? 'assets/win.gif' : 'assets/oops.gif'}>
-		<h2>${!sock ? 'You won!' : 'Oops, you found a sock!'}</h2>
-		${!sock ? '<p>You found all of the monsters. Congrats!</p>' : ''}
+		<img class="img-full" src=${
+			!hasFoundSock ? 'assets/win.gif' : 'assets/oops.gif'
+		}>
+		<h2>${!hasFoundSock ? 'You won!' : 'Oops, you found a sock!'}</h2>
+		${!hasFoundSock ? '<p>You found all of the monsters. Congrats!</p>' : ''}
 		<p><button id="reset">play again</button></p>
 		`)
 	}
@@ -84,14 +87,18 @@
 		if (resetButton) return reset()
 
 		if (!monster) return
+
 		const index = monster.getAttribute('data-monster-id')
 		const sock = monsters.findIndex(item => item === 'sock')
-
-		if (index == sock || monstersFound === monsters.length - 2)
-			return gameEnd(sock)
+		if (index == sock) {
+			hasFoundSock = !hasFoundSock
+			return gameEnd()
+		}
 
 		monstersFound++
 		monster.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
+
+		if (monstersFound == monsters.length - 1) return gameEnd()
 	}
 
 	function createCells(monsters) {
