@@ -63,7 +63,7 @@
 
 	const app = document.querySelector('#app')
 	let hasFoundSock = false
-	let monstersFound
+	let monstersFound = null
 
 	const renderMonsters = function() {
 		function createCells(monsters) {
@@ -111,23 +111,24 @@
 
 	function handleClick(e) {
 		const resetButton = e.target.matches('#reset')
-		const monster = e.target.closest('[data-monster-id]')
+		const card = e.target.closest('[data-monster-id]')
 
 		if (resetButton) return reset()
 
-		if (!monster) return
+		if (!card) return
 
-		const index = monster.getAttribute('data-monster-id')
-		const sock = monsters.findIndex(item => item === 'sock')
-		if (index == sock) {
+		const index = card.getAttribute('data-monster-id')
+		const monster = monsters[index]
+
+		if (monster === 'sock') {
 			hasFoundSock = !hasFoundSock
 			return gameEnd()
 		}
 
 		monstersFound++
-		monster.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
+		card.parentNode.innerHTML = `<img src="assets/svg/${monster}.svg" alt="${monster}">`
 
-		if (monstersFound == monsters.length - 1) return gameEnd()
+		if (monstersFound === monsters.length - 1) return gameEnd()
 	}
 
 	renderMonsters()
