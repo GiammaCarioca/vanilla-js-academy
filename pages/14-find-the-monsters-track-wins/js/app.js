@@ -68,47 +68,29 @@
 		location.reload()
 	}
 
-	function youWin() {
-		const body = document.querySelector('body')
-		const div = document.createElement('div')
+	function gameEnd() {
 		const resetButton = document.createElement('button')
-
-		app.closest('#app').remove()
-		body.insertBefore(div, body.childNodes[2])
-		div.textContent = 'You won! You found all of the monsters. Congrats!'
-		body.insertBefore(resetButton, body.childNodes[3])
 		resetButton.textContent = 'play again'
 		resetButton.setAttribute('id', 'reset')
-	}
+		app.insertAdjacentElement('afterend', resetButton)
 
-	function gameOver() {
-		const body = document.querySelector('body')
-		const div = document.createElement('div')
-		const resetButton = document.createElement('button')
-
-		app.closest('#app').remove()
-		body.insertBefore(div, body.childNodes[2])
-		div.textContent = 'Oops, you found a sock!'
-		body.insertBefore(resetButton, body.childNodes[3])
-		resetButton.textContent = 'play again'
-		resetButton.setAttribute('id', 'reset')
+		app.textContent =
+			monstersFound === monsters.length - 2
+				? 'You won! You found all of the monsters. Congrats!'
+				: 'Oops, you found a sock!'
 	}
 
 	function handleClick(e) {
-		const resetBtn = e.target.matches('#reset')
-		if (resetBtn) {
-			reset()
-		}
-
+		const resetButton = e.target.matches('#reset')
 		const monster = e.target.closest('[data-monster-id]')
 
+		if (resetButton) return reset()
+
 		if (!monster) return
-		const sock = monsters.findIndex(monster => monster === 'sock')
 		const index = monster.getAttribute('data-monster-id')
+		const sock = monsters.findIndex(item => item === 'sock')
 
-		if (index == sock) return gameOver()
-
-		if (monstersFound === monsters.length - 2) return youWin()
+		if (index == sock || monstersFound === monsters.length - 2) return gameEnd()
 
 		monstersFound++
 		monster.parentNode.innerHTML = `<img src="assets/svg/${monsters[index]}.svg" alt="${monsters[index]}">`
