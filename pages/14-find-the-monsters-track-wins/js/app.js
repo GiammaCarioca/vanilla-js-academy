@@ -63,10 +63,39 @@
 
 	const app = document.querySelector('#app')
 	let hasFoundSock = false
-	let monstersFound = null
+	let monstersFound
+
+	const renderMonsters = function() {
+		function createCells(monsters) {
+			return monsters.map(
+				(_, index) =>
+					`<button type="button" data-monster-id="${index}"><img src="assets/svg/door.svg" alt="Click the door to see what\'s behind it"></button>`
+			)
+		}
+
+		function buildGrid() {
+			const cells = createCells(monsters)
+			return (
+				'<p>Click a door to reveal a monster. Try not to find the sock.</p>' +
+				'<div class="row">' +
+				shuffle(cells)
+					.map(item => `<div class="grid" aria-live="polite">${item}</div>`)
+					.join('') +
+				'</div>'
+			)
+		}
+
+		function renderGrid() {
+			app.innerHTML = buildGrid()
+		}
+
+		renderGrid()
+	}
 
 	function reset() {
-		location.reload()
+		hasFoundSock = false
+		monstersFound = 0
+		renderMonsters()
 	}
 
 	function gameEnd() {
@@ -101,30 +130,7 @@
 		if (monstersFound == monsters.length - 1) return gameEnd()
 	}
 
-	function createCells(monsters) {
-		return monsters.map(
-			(_, index) =>
-				`<button type="button" data-monster-id="${index}"><img src="assets/svg/door.svg" alt="Click the door to see what\'s behind it"></button>`
-		)
-	}
-
-	function buildGrid() {
-		const cells = createCells(monsters)
-		return (
-			'<p>Click a door to reveal a monster. Try not to find the sock.</p>' +
-			'<div class="row">' +
-			shuffle(cells)
-				.map(item => `<div class="grid" aria-live="polite">${item}</div>`)
-				.join('') +
-			'</div>'
-		)
-	}
-
-	function renderGrid() {
-		app.innerHTML = buildGrid()
-	}
-
-	renderGrid()
+	renderMonsters()
 
 	document.addEventListener('click', handleClick, false)
 })()
