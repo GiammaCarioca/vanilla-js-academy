@@ -29,3 +29,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [13. Find The Monsters](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/13-find-the-monsters/js/app.js)
 
 [14. Find The Monsters - Track Wins](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/14-find-the-monsters-track-wins/js/app.js)
+
+[15. Table of Contents](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/15-table-of-contents/js/app.js)
