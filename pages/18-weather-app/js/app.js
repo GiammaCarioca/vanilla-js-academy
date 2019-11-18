@@ -1,21 +1,52 @@
 ;(function() {
 	'use strict'
 
-	const API_KEY = '0345d3e5744543d9b60ade7183f1456e'
-	const BASE_URL = 'https://api.weatherbit.io/v2.0/current'
+	const apiKey = '0345d3e5744543d9b60ade7183f1456e'
+	const weatherApi = 'https://api.weatherbit.io/v2.0/current'
 
 	const app = document.querySelector('#app')
 
+	/**
+	 * Sanitize and encode all HTML in a user-submitted string
+	 * @param  {String} str  The user-submitted string
+	 * @return {String} str  The sanitized string
+	 */
+	const sanitizeHTML = function(str) {
+		const temp = document.createElement('div')
+		temp.textContent = str
+		return temp.innerHTML
+	}
+
+	const renderWeather = weather => {
+		app.innerHTML = `<img src="https://www.weatherbit.io/static/img/icons/${sanitizeHTML(
+			weather.weather.icon
+		)}.png" alt="${sanitizeHTML(
+			weather.weather.description
+		)}"></img><p>It is currently ${sanitizeHTML(
+			weather.temp
+		)} degrees <br/>in ${sanitizeHTML(weather.city_name)}.</p>`
+	}
+
 	fetch('https://ipapi.co/json')
-		.then(response => response.json())
+		.then(response => {
+			if (response.ok) {
+				return response.json()
+			} else {
+				return Promise.reject(response)
+			}
+		})
 		.then(data =>
 			fetch(
-				`${BASE_URL}?&lat=${data.latitude}&lon=${data.longitude}&key=${API_KEY}`
+				`${weatherApi}?&lat=${data.latitude}&lon=${data.longitude}&key=${apiKey}`
 			)
 		)
-		.then(response => response.json())
-		.then(
-			info =>
-				(app.innerHTML = `<img src="https://www.weatherbit.io/static/img/icons/${info.data[0].weather.icon}.png" alt="${info.data[0].weather.description}"></img><p>It is currently ${info.data[0].temp} degrees in ${info.data[0].city_name}.</p>`)
-		)
+		.then(response => {
+			if (response.ok) {
+				return response.json()
+			} else {
+				return Promise.reject(response)
+			}
+		})
+		.then(data => renderWeather(data.data[0]))
+		.catch(_ => (app.textContent = 'Unable to get weather data at this time.'))
 })()
