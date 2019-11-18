@@ -33,3 +33,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [15. Table of Contents](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/15-table-of-contents/js/app.js)
 
 [16. Table of Contents | Missing IDs](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/16-table-of-contents-missing-id/js/app.js)
+
+[18. Weather App](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/18-weather-app/js/app.js)
