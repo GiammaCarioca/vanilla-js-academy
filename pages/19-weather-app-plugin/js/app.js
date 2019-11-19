@@ -14,7 +14,6 @@ var weatherPlugin = function(options) {
 		tempScale: 'celsius',
 		displayIcon: true,
 		message: ''
-		// message: 'It is currently {temperature} {condition} in {city}.'
 	}
 
 	var settings = Object.assign(defaults, options)
@@ -72,17 +71,15 @@ var weatherPlugin = function(options) {
 
 	/**
 	 * Display message
-	 * @param  {String} message The text
-	 * @return {String}      		The message populated with the variables
+	 * @param  {String} weather The api weather data
+	 * @return {String}      		The custom message populated with the variables
 	 */
 	var displayMessage = function(weather) {
-		console.log(weather)
 		let message = settings.message
 			.replace('{city}', weather.city_name)
 			.replace('{temp}', displayTemp(weather.temp))
 			.replace('{description}', weather.weather.description.toLowerCase())
 			.replace('{sunset}', weather.sunset)
-		console.log(message)
 		return '<p>' + message + '</p>'
 	}
 
