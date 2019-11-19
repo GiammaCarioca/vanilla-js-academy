@@ -1,4 +1,4 @@
-;(function() {
+var weatherPlugin = function(options) {
 	'use script'
 
 	//
@@ -8,8 +8,17 @@
 	// Store the weather API key to a variable for easier configuration
 	var apiKey = '0345d3e5744543d9b60ade7183f1456e'
 
+	// Defaults
+	var defaults = {
+		selector: 'div#app',
+		tempScale: 'celsius',
+		displayIcon: true
+	}
+
+	var settings = Object.assign(defaults, options)
+
 	// Get the #app element
-	var app = document.querySelector('#app')
+	var app = document.querySelector(settings.selector)
 
 	//
 	// Methods
@@ -27,12 +36,37 @@
 	}
 
 	/**
-	 * Convert fahrenheit to celcius
+	 * Convert celcius to fahrenheit
 	 * @param  {String} temp The temperature in celcius
 	 * @return {Number}      The temperature in fahrenheit
 	 */
-	var fToC = function(temp) {
+	var cToF = function(temp) {
 		return (parseFloat(temp) * 9) / 5 + 32
+	}
+
+	/**
+	 * Display icon
+	 * @param  {String} icon The icon code
+	 * @return {String}      The image to be displayed
+	 */
+	var displayIcon = function(icon) {
+		return settings.displayIcon
+			? '<img src="https://www.weatherbit.io/static/img/icons/' +
+					icon +
+					'.png">'
+			: ''
+	}
+
+	/**
+	 * Display temperature
+	 * @param  {Number} temp The temperature
+	 * @return {String}      The temp to be displayed on the scale chosen
+	 */
+	var displayTemp = function(temp) {
+		console.log(typeof temp)
+		return settings.tempScale === 'fahrenheit'
+			? cToF(sanitizeHTML(temp)) + '°F '
+			: sanitizeHTML(temp) + '°C '
 	}
 
 	/**
@@ -42,13 +76,10 @@
 	var renderWeather = function(weather) {
 		app.innerHTML =
 			'<p>' +
-			'<img src="https://www.weatherbit.io/static/img/icons/' +
-			weather.weather.icon +
-			'.png">' +
+			displayIcon(weather.weather.icon) +
 			'</p>' +
 			'<p>It is currently ' +
-			fToC(sanitizeHTML(weather.temp)) +
-			' degrees and ' +
+			displayTemp(weather.temp) +
 			sanitizeHTML(weather.weather.description).toLowerCase() +
 			' in ' +
 			sanitizeHTML(weather.city_name) +
@@ -104,4 +135,9 @@
 		.catch(function() {
 			renderNoWeather()
 		})
-})()
+}
+
+weatherPlugin({
+	tempScale: 'fahrenheit',
+	displayIcon: true
+})
