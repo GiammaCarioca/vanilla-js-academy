@@ -10,10 +10,28 @@ const tinyDOM = (function() {
 
 	/**
 	 * Convert a NodeList to an array
-	 * @param  {NodeList} nodeList The original
-	 * @return {Array}             The array from the NodeList
+	 * @param  {NodeList}
+	 * @return {Array}
 	 */
 	methods.makeArr = nodeList => Array.from(nodeList)
+
+	/**
+	 * Get the first matching element in the DOM
+	 * @param  {NodeList}
+	 * @return
+	 */
+	methods.getFirst = function(elements) {
+		return methods.makeArr(elements)[0]
+	}
+
+	/**
+	 * Get all matching elements in the DOM as an array
+	 * @param  {NodeList}
+	 * @return {Array}
+	 */
+	methods.getElements = function(elements) {
+		return methods.makeArr(elements)
+	}
 
 	/**
 	 * Add a class from all elements in an array
