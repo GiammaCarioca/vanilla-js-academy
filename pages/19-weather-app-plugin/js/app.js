@@ -172,9 +172,11 @@ const getTheWeather = function(options) {
 		.catch(_ => renderNoWeather())
 }
 
+// Initialize the plugin
 getTheWeather({
 	apiKey: '0345d3e5744543d9b60ade7183f1456e',
 	convertTemp: true,
 	description:
-		"Right now in {{city}}, it's {{temp}} and {{conditions}}. The sunset will be at {{sunset}}."
+		"Right now in {{city}}, it's {{temp}} and {{conditions}}. The sunset will be at {{sunset}}.",
+	noWeather: 'Unable to get weather data at this time. Try again later!'
 })
