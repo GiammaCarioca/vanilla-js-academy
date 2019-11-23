@@ -39,3 +39,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [19. Weather App Plugin](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/19-weather-app-plugin/js/app.js)
 
 [20. Helper Library](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/20-helper-library/js/app.js)
+
+[21. DOM Manipulation Library](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/21-dom-manipulation-library/js/app.js)
