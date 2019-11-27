@@ -43,3 +43,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [21. DOM Manipulation Library](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/21-dom-manipulation-library/js/app.js)
 
 [22. DOM Manipulation Library with chaining methods](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/22-dom-manipulation-library-with-chaining-methods/js/app.js)
+
+[23. Debugging Broken Code](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/23-debugging-broken-code/js/app.js)
