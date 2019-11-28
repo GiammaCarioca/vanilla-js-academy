@@ -49,51 +49,30 @@
 		</form>
 
 		<script>
-			const name = document.querySelector('#name')
-			const address = document.querySelector('#address')
-			const email = document.querySelector('#email')
-			const button = document.querySelector('button[type="submit"]')
+			const form = document.querySelector('#save-me')
 
-			const handleChange = e => {
-				if (e.target.name === 'name') {
-					localStorage.setItem('name', e.target.value)
-				}
-
-				if (e.target.name === 'address') {
-					localStorage.setItem('address', e.target.value)
-				}
-
-				if (e.target.name === 'email') {
-					localStorage.setItem('email', e.target.value)
-				}
+			const saveFormData = evt => {
+				if (!evt.target.matches('input')) return
+				localStorage.setItem(evt.target['name'], evt.target.value)
 			}
 
-			const handleSubmit = event => {
-				event.preventDefault()
-				name.value = null
-				address.value = null
-				email.value = null
+			const handleSubmit = evt => {
+				if (!evt.target.closest('form').matches('#save-me')) return
 				localStorage.clear()
 			}
 
 			const populateForm = _ => {
-				if (localStorage.getItem('name')) {
-					name.value = localStorage.getItem('name')
-				}
-
-				if (localStorage.getItem('address')) {
-					address.value = localStorage.getItem('address')
-				}
-
-				if (localStorage.getItem('email')) {
-					email.value = localStorage.getItem('email')
+				for (let item in localStorage) {
+					if (localStorage.hasOwnProperty(item)) {
+						form.children[item].value = localStorage.getItem(item)
+					}
 				}
 			}
 
 			populateForm()
 
-			document.addEventListener('input', handleChange, false)
-			document.addEventListener('submit', handleSubmit, false)
+			form.addEventListener('input', saveFormData, false)
+			form.addEventListener('submit', handleSubmit, false)
 		</script>
 	</body>
 </html>
