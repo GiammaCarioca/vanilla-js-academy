@@ -20,7 +20,7 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 
 [09. What To Read Today](https://giammacarioca.github.io/vanilla-js-academy/pages/09-nyt-top-stories/js/main.js)
 
-[10. What To Read Today - Multiple Sections](https://giammacarioca.github.io/vanilla-js-academy/pages/10-nyt-multiple-categories/js/main.js)
+[10. What To Read Today | Multiple Sections](https://giammacarioca.github.io/vanilla-js-academy/pages/10-nyt-multiple-categories/js/main.js)
 
 [11. Sanitizing the NYT API Data](https://giammacarioca.github.io/vanilla-js-academy/pages/11-sanitizing-data/js/main.js)
 
@@ -28,7 +28,7 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 
 [13. Find The Monsters](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/13-find-the-monsters/js/app.js)
 
-[14. Find The Monsters - Track Wins](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/14-find-the-monsters-track-wins/js/app.js)
+[14. Find The Monsters | Track Wins](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/14-find-the-monsters-track-wins/js/app.js)
 
 [15. Table of Contents](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/15-table-of-contents/js/app.js)
 
@@ -47,3 +47,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [23. Debugging Broken Code](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/23-debugging-broken-code/js/app.js)
 
 [24. Autosave](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/24-autosave/js/app.js)
+
+[25. Autosave | Single Entry](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/25-autosave-single-entry/js/app.js)
