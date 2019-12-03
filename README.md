@@ -49,3 +49,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [24. Autosave](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/24-autosave/js/app.js)
 
 [25. Autosave | Single Entry](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/25-autosave-single-entry/js/app.js)
+
+[26. Autosave | Other Field Types](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/26-autosave-other-field-types/js/app.js)
