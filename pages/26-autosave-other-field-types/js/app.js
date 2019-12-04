@@ -76,7 +76,7 @@
 			if (savedFormData.hasOwnProperty(key)) {
 				form[key].value = value
 
-				if (key === 'spiderman' || 'wonderwoman' || 'blackpanther') {
+				if (form[key].type === 'checkbox') {
 					form[key].checked = value && true
 				}
 			}
