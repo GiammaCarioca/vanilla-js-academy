@@ -64,9 +64,7 @@
 		const name = 'data'
 		const key = evt.target['name']
 		const value =
-			evt.target.type === 'checkbox'
-				? `${evt.target.checked}`
-				: evt.target.value
+			evt.target.type === 'checkbox' ? evt.target.checked : evt.target.value
 		addToLocalStorageObject(name, key, value)
 	}
 
@@ -76,21 +74,10 @@
 
 		for (let [key, value] of Object.entries(savedFormData)) {
 			if (savedFormData.hasOwnProperty(key)) {
-				switch (key) {
-					case 'spiderman':
-						const result1 = value === 'true' ? true : false
-						form[key].checked = result1
-						break
-					case 'wonderwoman':
-						const result2 = value === 'true' ? true : false
-						form[key].checked = result2
-						break
-					case 'blackpanther':
-						const result3 = value === 'true' ? true : false
-						form[key].checked = result3
-						break
-					default:
-						form[key].value = value
+				form[key].value = value
+
+				if (key === 'spiderman' || 'wonderwoman' || 'blackpanther') {
+					form[key].checked = value && true
 				}
 			}
 		}
