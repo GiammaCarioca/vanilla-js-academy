@@ -51,3 +51,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [25. Autosave | Single Entry](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/25-autosave-single-entry/js/app.js)
 
 [26. Autosave | Other Field Types](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/26-autosave-other-field-types/js/app.js)
+
+[27. API Cache](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/27-api-cache/js/app.js)
