@@ -7,12 +7,8 @@
 
 	const app = document.querySelector('#app')
 	const endpoint = 'https://vanillajsacademy.com/api/pirates.json'
-
-	// Get data from localStorage
-	const saved = JSON.parse(localStorage.getItem('myData'))
-
-	// 5 minutes
-	const goodFor = 1000 * 60 * 5
+	const storageID = 'pirateCache'
+	const timestring = 1000 * 60 * 5 // expiration time: five minutes
 
 	//
 	// Helper functions
@@ -30,12 +26,18 @@
 		return temp.innerHTML
 	}
 
+	/**
+	 * Check if the data is valid
+	 * @param  {Object}  saved   The data to validate
+	 * @param  {Number}  goodFor How long the data is good for
+	 * @return {Boolean}         If true, data has not yet expired
+	 */
 	const isDataValid = function(saved, goodFor) {
 		// Check that there's data, and a timestamp key
 		if (!saved || !saved.data || !saved.timestamp) return
 
 		// Get timestamp from cache
-		const { timestamp } = JSON.parse(localStorage.getItem('myData'))
+		const { timestamp } = JSON.parse(localStorage.getItem(storageID))
 
 		// Get the difference between the timestamp and current time
 		const difference = new Date().getTime() - timestamp
@@ -43,54 +45,81 @@
 		return difference < goodFor
 	}
 
-	const saveToLocalStorage = data => {
-		// Setup the localStorage data
-		const saved = {
+	/**
+	 * Save article data to localStorage
+	 * @param  {Object} data The article data
+	 */
+	const saveDataToLocalStorage = data => {
+		// Create a cache object with a timestamp
+		const cache = {
 			data: data,
 			timestamp: new Date().getTime()
 		}
 
-		// Save to localStorage
-		localStorage.setItem('myData', JSON.stringify(saved))
+		// Stringify it and save it to localStorage
+		localStorage.setItem(storageID, JSON.stringify(cache))
 	}
 
-	const getFromLocalStorage = _ => {
-		const { data } = JSON.parse(localStorage.getItem('myData'))
-		return data
-	}
+	/**
+	 * Render articles into the UI
+	 * @param  {Object} articles The API response object
+	 */
+	const renderNews = data => {
+		const { articles } = data
 
-	const render = function(articles) {
-		return articles
-			.map(
-				article =>
-					`<article>
+		// If there are no articles, render a message into the UI
+		if (articles.length < 1) {
+			renderNoArticles()
+			return
+		}
+
+		// Otherwise, render the UI
+		return (app.innerHTML =
+			articles
+				.map(
+					article =>
+						`<article>
 						<h2>${sanitizeHTML(article.title)}</h2>
-						<h3>by ${sanitizeHTML(article.author)}</h3>
+						<p><em>By ${sanitizeHTML(article.author)} on ${sanitizeHTML(
+							article.pubdate
+						)} </em></p>
 						<p>${sanitizeHTML(article.article)}</p>
 					</article>`
-			)
-			.join('')
+				)
+				.join('') +
+			`<p><em>Articles from <a href="${sanitizeHTML(
+				data.attribution.url
+			)}">${sanitizeHTML(data.attribution.name)}</a></em></p>`)
+	}
+
+	/**
+	 * Render a message into the UI when there are no articles to share
+	 */
+	const renderNoArticles = function() {
+		app.innerHTML =
+			'<p>There be no pirate news afoot, matey. Check back later.</p>'
 	}
 
 	//
 	// Methods
 	//
 
-	const getArticles = () => {
+	/**
+	 * Get articles from the API
+	 */
+	const fetchArticles = () => {
 		fetch(endpoint)
 			.then(response => {
 				if (response.ok) return response.json()
 				return Promise.reject(response)
 			})
-			.then(data => saveToLocalStorage(data))
-			.then(cached => getFromLocalStorage(cached))
-			.then(cached => render(cached.articles))
-			.then(function(htmlString) {
-				app.innerHTML = htmlString
-				return app
+			.then(data => {
+				renderNews(data)
+				saveDataToLocalStorage(data)
 			})
-			.catch(function(error) {
+			.catch(error => {
 				console.log('Something went wrong:', error)
+				renderNoArticles()
 			})
 	}
 
@@ -98,14 +127,25 @@
 	// Inits
 	//
 
-	// Check if it's been less than a minute since the data was saved
-	if (isDataValid(saved, goodFor)) {
-		// The data is still good, use it
-		const { data } = saved
-		app.innerHTML = render(data.articles)
-		return app
-	} else {
-		// Get fresh data and use that instead
-		getArticles()
+	/**
+	 * Get API data from localStorage
+	 */
+	const saved = JSON.parse(localStorage.getItem(storageID))
+
+	if (saved) {
+		// Check if it's been less than five minutes since the data was saved
+		if (isDataValid(saved, timestring)) {
+			// The data is still good, use it
+			console.log('loaded from cache')
+
+			const { data } = saved
+			renderNews(data)
+
+			return
+		}
 	}
+
+	// Get fresh data and use that instead
+	console.log('fetched from API')
+	fetchArticles()
 })()
