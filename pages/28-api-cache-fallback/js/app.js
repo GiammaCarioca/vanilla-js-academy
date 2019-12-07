@@ -73,6 +73,12 @@
 	}
 
 	/**
+	 * Get API data from localStorage
+	 */
+	const getDataFromLocalStorage = () =>
+		JSON.parse(localStorage.getItem(storageID))
+
+	/**
 	 * Render articles into the UI
 	 * @param  {Object} articles The API response object
 	 */
@@ -126,16 +132,11 @@
 					if (response.ok) return response.json()
 					return Promise.reject(response)
 				})
-				.then(data => {
-					renderNews(data)
-					saveDataToLocalStorage(data)
-				})
-				.catch(error => {
-					console.log('Something went wrong:', error)
-				})
+				.then(data => saveDataToLocalStorage(data))
+		} catch (error) {
+			error => console.log('Something went wrong:', error)
 		} finally {
-			const saved = JSON.parse(localStorage.getItem(storageID))
-			const { data } = saved
+			const { data } = getDataFromLocalStorage()
 			renderNews(data)
 		}
 	}
@@ -143,10 +144,10 @@
 	/**
 	 * Get API data from localStorage
 	 */
-	const saved = JSON.parse(localStorage.getItem(storageID))
+	const saved = getDataFromLocalStorage()
 
 	if (saved) {
-		// Check if it's been less than five minutes since the data was saved
+		// Check if the data is still fresh
 		if (isDataValid(saved, timestring)) {
 			// The data is still good, use it
 			console.log('loaded from cache')
@@ -162,7 +163,5 @@
 	// Inits
 	//
 
-	// Get fresh data and use that instead
-	console.log('fetched from API')
 	fetchArticles()
 })()
