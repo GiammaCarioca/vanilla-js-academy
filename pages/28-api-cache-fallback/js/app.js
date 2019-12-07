@@ -6,10 +6,8 @@
 	//
 
 	const app = document.querySelector('#app')
-	// const endpoint = 'https://vanillajsacademy.com/api/pirates.json'
 	const storageID = 'pirateCache'
-	// const timestring = 1000 * 60 * 5 // expiration time: five minutes
-	const timestring = 1000 * 5 // expiration time: five seconds
+	const timestring = 1000 * 10 // expiration time: 10 seconds
 
 	//
 	// Helper functions
@@ -73,12 +71,6 @@
 	}
 
 	/**
-	 * Get API data from localStorage
-	 */
-	const getDataFromLocalStorage = () =>
-		JSON.parse(localStorage.getItem(storageID))
-
-	/**
 	 * Render articles into the UI
 	 * @param  {Object} articles The API response object
 	 */
@@ -132,30 +124,21 @@
 					if (response.ok) return response.json()
 					return Promise.reject(response)
 				})
-				.then(data => saveDataToLocalStorage(data))
+				.then(data => {
+					renderNews(data)
+					saveDataToLocalStorage(data)
+				})
 		} catch (error) {
 			error => console.log('Something went wrong:', error)
 		} finally {
-			const { data } = getDataFromLocalStorage()
-			renderNews(data)
-		}
-	}
+			const saved = JSON.parse(localStorage.getItem(storageID))
 
-	/**
-	 * Get API data from localStorage
-	 */
-	const saved = getDataFromLocalStorage()
+			if (saved) {
+				const { data } = saved
 
-	if (saved) {
-		// Check if the data is still fresh
-		if (isDataValid(saved, timestring)) {
-			// The data is still good, use it
-			console.log('loaded from cache')
-
-			const { data } = saved
-			renderNews(data)
-
-			return
+				return renderNews(data)
+			}
+			renderNoArticles()
 		}
 	}
 
@@ -163,5 +146,24 @@
 	// Inits
 	//
 
+	/**
+	 * Get API data from localStorage
+	 */
+	const saved = JSON.parse(localStorage.getItem(storageID))
+
+	if (saved) {
+		// Check if the data is still good
+		if (isDataValid(saved, timestring)) {
+			// The data is still good, use it
+			console.log('loaded from cache')
+
+			const { data } = saved
+			return renderNews(data)
+		}
+	}
+
+	/**
+	 * Get fresh data and use that instead
+	 */
 	fetchArticles()
 })()
