@@ -135,30 +135,33 @@
 	// Inits
 	//
 
-	/**
-	 * Get API data from localStorage
-	 */
-	const saved = JSON.parse(localStorage.getItem(storageID))
+	const init = () => {
+		/**
+		 * Get API data from localStorage
+		 */
+		const saved = JSON.parse(localStorage.getItem(storageID))
 
-	if (saved) {
-		// Check if the data is still good
-		if (isDataValid(saved, timestring)) {
-			// The data is still good, use it
-			console.log('loaded from cache')
+		if (saved) {
+			// Check if the data is still good
+			if (isDataValid(saved, timestring)) {
+				// The data is still good, use it
+				console.log('loaded from cache')
 
-			const { data } = saved
-			return renderNews(data)
+				const { data } = saved
+				return renderNews(data)
+			}
+		}
+
+		try {
+			// Get fresh data and use that instead
+			fetchArticles().then(data => renderNews(data))
+		} catch (error) {
+			console.log('Something went wrong:', error)
+		} finally {
+			// Fallback if the API call fails
+			saved ? renderNews(saved.data) : renderNoArticles()
 		}
 	}
 
-	try {
-		// Get fresh data and use that instead
-		fetchArticles().then(data => renderNews(data))
-	} catch (error) {
-		console.log('Something went wrong:', error)
-	} finally {
-		// Fallback if the API call fails
-		const saved = JSON.parse(localStorage.getItem(storageID))
-		saved ? renderNews(saved.data) : renderNoArticles()
-	}
+	init()
 })()
