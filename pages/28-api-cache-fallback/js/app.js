@@ -118,17 +118,27 @@
 	 * Get data from the API and save it to localStorage
 	 */
 	const fetchArticles = async () => {
-		const response = await fetch(getEndpoint())
+		try {
+			const response = await fetch(getEndpoint())
 
-		if (!response.ok) {
-			throw Error(response.status)
+			if (!response.ok) return
+
+			const data = await response.json()
+
+			await saveDataToLocalStorage(data)
+
+			return data
+		} catch (error) {
+			console.log('Something went wrong:', error)
 		}
+	}
 
-		const data = await response.json()
-
-		await saveDataToLocalStorage(data)
-
-		return data
+	/**
+	 * Render content from API cache on failed request
+	 */
+	const renderFallback = () => {
+		const saved = JSON.parse(localStorage.getItem(storageID))
+		saved ? renderNews(saved.data) : renderNoArticles()
 	}
 
 	//
@@ -152,15 +162,9 @@
 			}
 		}
 
-		try {
-			// Get fresh data and use that instead
-			fetchArticles().then(data => renderNews(data))
-		} catch (error) {
-			console.log('Something went wrong:', error)
-		} finally {
-			// Fallback if the API call fails
-			saved ? renderNews(saved.data) : renderNoArticles()
-		}
+		fetchArticles()
+			.then(data => renderNews(data))
+			.catch(renderFallback())
 	}
 
 	init()
