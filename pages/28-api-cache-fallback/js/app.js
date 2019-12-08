@@ -115,31 +115,20 @@
 	//
 
 	/**
-	 * Get articles from the API
+	 * Get data from the API and save it to localStorage
 	 */
-	const fetchArticles = () => {
-		try {
-			fetch(getEndpoint())
-				.then(response => {
-					if (response.ok) return response.json()
-					return Promise.reject(response)
-				})
-				.then(data => {
-					renderNews(data)
-					saveDataToLocalStorage(data)
-				})
-		} catch (error) {
-			error => console.log('Something went wrong:', error)
-		} finally {
-			const saved = JSON.parse(localStorage.getItem(storageID))
+	const fetchArticles = async () => {
+		const response = await fetch(getEndpoint())
 
-			if (saved) {
-				const { data } = saved
-
-				return renderNews(data)
-			}
-			renderNoArticles()
+		if (!response.ok) {
+			throw Error(response.status)
 		}
+
+		const data = await response.json()
+
+		await saveDataToLocalStorage(data)
+
+		return data
 	}
 
 	//
@@ -162,8 +151,14 @@
 		}
 	}
 
-	/**
-	 * Get fresh data and use that instead
-	 */
-	fetchArticles()
+	try {
+		// Get fresh data and use that instead
+		fetchArticles().then(data => renderNews(data))
+	} catch (error) {
+		console.log('Something went wrong:', error)
+	} finally {
+		// Fallback if the API call fails
+		const saved = JSON.parse(localStorage.getItem(storageID))
+		saved ? renderNews(saved.data) : renderNoArticles()
+	}
 })()
