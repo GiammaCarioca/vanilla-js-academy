@@ -6,7 +6,11 @@
 	//
 	const btn = document.querySelector('button')
 
-	let timer = 10
+	const data = {
+		timer: 60
+	}
+
+	let timer = data.timer
 
 	//
 	// Methods
@@ -39,7 +43,7 @@
 	}
 
 	const restart = _ => {
-		timer = 10
+		timer = data.timer
 		btn.style.display = 'none'
 		render()
 		startTimer()
