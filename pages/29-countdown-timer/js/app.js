@@ -10,18 +10,18 @@
 		timer: 60
 	}
 
-	let timer = data.timer
+	let count = data.timer
 
 	//
 	// Methods
 	//
 	const template = _ => {
-		if (timer <= 0) {
+		if (count <= 0) {
 			btn.style.display = 'inline-block'
 			return '<p>⏰</p>'
 		}
 
-		return `<p>${timer}</p>`
+		return `<p>${count}</p>`
 	}
 
 	const render = _ => {
@@ -32,18 +32,18 @@
 
 	const startTimer = _ => {
 		const countdown = setInterval(function() {
-			timer--
+			count--
 
 			render()
 
-			if (timer <= 0) {
+			if (count <= 0) {
 				clearInterval(countdown)
 			}
 		}, 1000)
 	}
 
 	const restart = _ => {
-		timer = data.timer
+		count = data.timer
 		btn.style.display = 'none'
 		render()
 		startTimer()
