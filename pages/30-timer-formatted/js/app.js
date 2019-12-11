@@ -39,7 +39,7 @@
 
 	const formatTimer = time => {
 		const minutes = parseInt(time / 60, 10)
-		const seconds = parseInt(time - minutes * 60, 10)
+		const seconds = time % 60
 
 		const paddedMinutes = minutes.toString().padStart(2, '0')
 		const paddedSeconds = seconds.toString().padStart(2, '0')
