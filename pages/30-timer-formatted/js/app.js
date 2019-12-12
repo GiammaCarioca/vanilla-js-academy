@@ -37,14 +37,14 @@
 		}
 	}
 
-	const formatTimer = time => {
-		const minutes = parseInt(time / 60, 10)
-		const seconds = time % 60
+	const formatTimer = count => {
+		const minutes = parseInt(count / 60, 10)
+		const seconds = count % 60
 
-		const paddedMinutes = minutes.toString().padStart(2, '0')
+		const paddedMinutes = minutes.toString()
 		const paddedSeconds = seconds.toString().padStart(2, '0')
 
-		return `${paddedMinutes}:${paddedSeconds}`
+		return paddedMinutes + ':' + paddedSeconds
 	}
 
 	const template = _ => {
