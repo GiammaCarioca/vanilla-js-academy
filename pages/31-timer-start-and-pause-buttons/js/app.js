@@ -4,13 +4,22 @@
 	//
 	// Variables
 	//
+
+	// Get the #app element from the DOM
 	const app = document.querySelector('#app')
 
+	// Store duration to a variable
+	var duration = 120
+
+	// The state/data object
 	const data = {
-		timer: 120
+		timer: duration,
+		paused: false,
+		done: false
 	}
 
-	let count = data.timer
+	// A placeholder for the countdown interval
+	let countdown
 
 	//
 	// Methods
@@ -37,9 +46,10 @@
 		}
 	}
 
-	const formatTimer = count => {
-		const minutes = parseInt(count / 60, 10)
-		const seconds = count % 60
+	const formatTimer = _ => {
+		// Get the minutes and seconds
+		const minutes = parseInt(data.timer / 60, 10)
+		const seconds = data.timer % 60
 
 		const paddedMinutes = minutes.toString()
 		const paddedSeconds = seconds.toString().padStart(2, '0')
@@ -47,42 +57,87 @@
 		return paddedMinutes + ':' + paddedSeconds
 	}
 
+	/**
+	 * Get the template markup
+	 * @return {String} The HTML string
+	 */
 	const template = _ => {
-		if (count === 0) {
-			return '<p>⏰</p><button id="restart">Restart Timer</button>'
+		// If the timer is done, show a different UI
+		if (data.done) {
+			return '<p>⏰</p><button data-restart-timer>Restart Timer</button>'
 		}
 
-		return `<p>${formatTimer(count)}</p>`
+		return `<p>${formatTimer(
+			data.timer
+		)}</p><p><button data-pause-timer>Pause</button><button data-restart-timer>Restart</button></p>`
 	}
 
+	/**
+	 * Render the template into the DOM
+	 */
 	const render = _ => {
+		// If there are no updates to the UI, do nothing
+		if (app.innerHTML === template()) return
+
+		// Update the UI
 		app.innerHTML = template()
 	}
 
-	const startTimer = _ => {
-		const countdown = setInterval(function() {
+	/**
+	 * Start the timer
+	 */
+	const startTimer = duration => {
+		// Reset the data
+		data.timer = duration
+		data.done = false
+
+		// Run an initial render
+		render()
+
+		// Update the timer every second
+		countdown = setInterval(function() {
+			// Get the new timer value
+			let time = data.timer - 1
+
+			// If the timer hits 0, set as done
+			const done = time === 0 ? true : false
+
+			// Update data and render new UI
+			data.timer = time
+			data.done = done
+
+			// Render new UI
 			render()
 
-			count--
-
-			if (count < 0) {
+			// If the timer is done, stop it from running
+			if (data.done) {
 				clearInterval(countdown)
 			}
 		}, 1000)
 	}
 
-	const restartTimer = _ => {
-		if (event.target.id === 'restart') {
-			count = data.timer
+	/**
+	 * Handle the click on the buttons
+	 */
+	const handleclick = event => {
+		if (event.target.hasAttribute('data-pause-timer')) {
+			if (data.done) return startTimer(data.timer)
 
-			startTimer()
+			data.done = !data.done
+			clearInterval(countdown)
+			event.target.innerHTML = 'Start'
+		}
+
+		if (event.target.hasAttribute('data-restart-timer')) {
+			clearInterval(countdown)
+			startTimer(duration)
 		}
 	}
 
 	//
 	// Inits & Event Listeners
 	//
-	startTimer()
+	startTimer(duration)
 
-	document.addEventListener('click', restartTimer, false)
+	document.addEventListener('click', handleclick, false)
 })()
