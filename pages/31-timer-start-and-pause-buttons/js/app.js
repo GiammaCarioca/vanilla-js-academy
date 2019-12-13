@@ -14,7 +14,6 @@
 	// The state/data object
 	const data = {
 		timer: duration,
-		paused: false,
 		done: false
 	}
 
@@ -125,7 +124,7 @@
 
 			data.done = !data.done
 			clearInterval(countdown)
-			event.target.innerHTML = 'Start'
+			event.target.textContent = 'Start'
 		}
 
 		if (event.target.hasAttribute('data-restart-timer')) {
