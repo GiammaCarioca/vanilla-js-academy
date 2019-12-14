@@ -14,7 +14,8 @@
 	// The state/data object
 	const data = {
 		timer: duration,
-		done: false
+		done: false,
+		paused: true
 	}
 
 	// A placeholder for the countdown interval
@@ -66,9 +67,16 @@
 			return '<p>⏰</p><button data-restart-timer>Restart Timer</button>'
 		}
 
-		return `<p>${formatTimer(
-			data.timer
-		)}</p><p><button data-pause-timer>Pause</button><button data-restart-timer>Restart</button></p>`
+		// Create the markup string
+		const html =
+			`<p>${formatTimer(data.timer)}</p>` +
+			'<p>' +
+			(data.paused
+				? '<button data-start-timer>Start</button>'
+				: '<button data-pause-timer>Pause</button>') +
+			' <button data-restart-timer>Restart</button></p>'
+
+		return html
 	}
 
 	/**
@@ -83,17 +91,19 @@
 	}
 
 	/**
-	 * Start the timer
+	 * Stop the countdown
 	 */
-	const startTimer = duration => {
-		// Reset the data
-		data.timer = duration
-		data.done = false
+	const stopCountdown = _ => {
+		data.paused = true
+		clearInterval(countdown)
+	}
 
-		// Run an initial render
-		render()
+	/**
+	 * Update the timer every second
+	 */
+	const startCountdown = _ => {
+		data.paused = false
 
-		// Update the timer every second
 		countdown = setInterval(function() {
 			// Get the new timer value
 			let time = data.timer - 1
@@ -101,7 +111,7 @@
 			// If the timer hits 0, set as done
 			const done = time === 0 ? true : false
 
-			// Update data and render new UI
+			// Update data
 			data.timer = time
 			data.done = done
 
@@ -110,33 +120,60 @@
 
 			// If the timer is done, stop it from running
 			if (data.done) {
-				clearInterval(countdown)
+				stopCountdown()
 			}
 		}, 1000)
 	}
 
 	/**
-	 * Handle the click on the buttons
+	 * Start the timer
 	 */
-	const handleclick = event => {
-		if (event.target.hasAttribute('data-pause-timer')) {
-			if (data.done) return startTimer(data.timer)
+	const startTimer = _ => {
+		// Reset the data
+		data.timer = duration
+		data.done = false
 
-			data.done = !data.done
-			clearInterval(countdown)
-			event.target.textContent = 'Start'
+		// Clear any existing timers
+		stopCountdown()
+
+		// Update the timer every second
+		startCountdown()
+
+		// Run an initial render
+		render()
+	}
+
+	/**
+	 * Handle click events
+	 * @return {Event} The event object
+	 */
+	const clickhandler = event => {
+		// If a restart button was clicked, start the timer
+		if (event.target.hasAttribute('data-restart-timer')) {
+			startTimer()
 		}
 
-		if (event.target.hasAttribute('data-restart-timer')) {
-			clearInterval(countdown)
-			startTimer(duration)
+		// If the start button was clicked, start the timer
+		// Restart the countdown
+		if (event.target.hasAttribute('data-start-timer')) {
+			startCountdown()
+			render()
+		}
+
+		// If the pause button was clicked, pause the timer
+		// Stop the countdown
+		if (event.target.hasAttribute('data-pause-timer')) {
+			stopCountdown()
+			render()
 		}
 	}
 
 	//
 	// Inits & Event Listeners
 	//
-	startTimer(duration)
 
-	document.addEventListener('click', handleclick, false)
+	// Render the timer on page load
+	render()
+
+	document.addEventListener('click', clickhandler, false)
 })()
