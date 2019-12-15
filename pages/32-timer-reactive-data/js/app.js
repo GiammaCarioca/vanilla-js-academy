@@ -130,7 +130,7 @@
 			setData({ ...data, timer: time, done: done })
 
 			// If the timer is done, stop it from running
-			if (data.done) {
+			if (done) {
 				stopCountdown()
 			}
 		}, 1000)
@@ -148,9 +148,6 @@
 
 		// Update the timer every second
 		startCountdown()
-
-		// Run an initial render
-		render()
 	}
 
 	/**
@@ -167,14 +164,12 @@
 		// Restart the countdown
 		if (event.target.hasAttribute('data-start-timer')) {
 			startCountdown()
-			render()
 		}
 
 		// If the pause button was clicked, pause the timer
 		// Stop the countdown
 		if (event.target.hasAttribute('data-pause-timer')) {
 			stopCountdown()
-			render()
 		}
 	}
 
