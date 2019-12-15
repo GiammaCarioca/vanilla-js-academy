@@ -9,7 +9,7 @@
 	const app = document.querySelector('#app')
 
 	// Store duration to a variable
-	const duration = 20
+	const duration = 120
 
 	// The state/data object
 	const data = {
