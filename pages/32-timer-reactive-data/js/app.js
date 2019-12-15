@@ -9,7 +9,7 @@
 	const app = document.querySelector('#app')
 
 	// Store duration to a variable
-	var duration = 120
+	const duration = 20
 
 	// The state/data object
 	const data = {
@@ -46,7 +46,7 @@
 		}
 	}
 
-	const formatTimer = _ => {
+	const formatTimer = function() {
 		// Get the minutes and seconds
 		const minutes = parseInt(data.timer / 60, 10)
 		const seconds = data.timer % 60
@@ -61,7 +61,7 @@
 	 * Get the template markup
 	 * @return {String} The HTML string
 	 */
-	const template = _ => {
+	const template = function() {
 		// If the timer is done, show a different UI
 		if (data.done) {
 			return '<p>⏰</p><button data-restart-timer>Restart Timer</button>'
@@ -82,7 +82,7 @@
 	/**
 	 * Render the template into the DOM
 	 */
-	const render = _ => {
+	const render = function() {
 		// If there are no updates to the UI, do nothing
 		if (app.innerHTML === template()) return
 
@@ -91,18 +91,34 @@
 	}
 
 	/**
+	 * Reactively update the data object
+	 * @param {Object} obj The updated data
+	 */
+	const setData = obj => {
+		// Update the data object
+		for (let key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				data[key] = obj[key]
+			}
+		}
+
+		// Render a new UI
+		render()
+	}
+
+	/**
 	 * Stop the countdown
 	 */
-	const stopCountdown = _ => {
-		data.paused = true
+	const stopCountdown = function() {
+		setData({ ...data, paused: true })
 		clearInterval(countdown)
 	}
 
 	/**
 	 * Update the timer every second
 	 */
-	const startCountdown = _ => {
-		data.paused = false
+	const startCountdown = function() {
+		setData({ ...data, paused: false })
 
 		countdown = setInterval(function() {
 			// Get the new timer value
@@ -111,12 +127,7 @@
 			// If the timer hits 0, set as done
 			const done = time === 0 ? true : false
 
-			// Update data
-			data.timer = time
-			data.done = done
-
-			// Render new UI
-			render()
+			setData({ ...data, timer: time, done: done })
 
 			// If the timer is done, stop it from running
 			if (data.done) {
@@ -128,10 +139,9 @@
 	/**
 	 * Start the timer
 	 */
-	const startTimer = _ => {
+	const startTimer = function() {
 		// Reset the data
-		data.timer = duration
-		data.done = false
+		setData({ ...data, timer: duration, done: false })
 
 		// Clear any existing timers
 		stopCountdown()
