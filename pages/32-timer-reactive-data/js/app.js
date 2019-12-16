@@ -123,7 +123,7 @@
 			// If the timer hits 0, set as done
 			const done = time === 0 ? true : false
 
-			setData({ ...data, timer: time, done: done })
+			setData({ timer: time, done: done })
 
 			// If the timer is done, stop it from running
 			if (done) {
