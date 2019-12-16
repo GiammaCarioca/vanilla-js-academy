@@ -12,7 +12,7 @@
 	const duration = 120
 
 	// The state/data object
-	const data = {
+	let data = {
 		timer: duration,
 		done: false,
 		paused: true
@@ -96,11 +96,7 @@
 	 */
 	const setData = obj => {
 		// Update the data object
-		for (let key in obj) {
-			if (obj.hasOwnProperty(key)) {
-				data[key] = obj[key]
-			}
-		}
+		data = { ...data, ...obj }
 
 		// Render a new UI
 		render()
@@ -110,7 +106,7 @@
 	 * Stop the countdown
 	 */
 	const stopCountdown = function() {
-		setData({ ...data, paused: true })
+		setData({ paused: true })
 		clearInterval(countdown)
 	}
 
@@ -118,7 +114,7 @@
 	 * Update the timer every second
 	 */
 	const startCountdown = function() {
-		setData({ ...data, paused: false })
+		setData({ paused: false })
 
 		countdown = setInterval(function() {
 			// Get the new timer value
@@ -140,14 +136,14 @@
 	 * Start the timer
 	 */
 	const startTimer = function() {
-		// Reset the data
-		setData({ ...data, timer: duration, done: false })
-
 		// Clear any existing timers
 		stopCountdown()
 
 		// Update the timer every second
 		startCountdown()
+
+		// Reset the data and render an initial UI
+		setData({ timer: duration, done: false })
 	}
 
 	/**
