@@ -7,7 +7,6 @@
 	// Variables
 	//
 	const todo = document.querySelector('#new-todo')
-	const form = document.querySelector('#add-todos')
 
 	//
 	// Methods
@@ -22,20 +21,22 @@
 	})
 
 	const addTodo = function(todo) {
-		app.data.todos = [...app.data.todos, todo]
+		if (!todo.value) return
 
-		console.log(app.data.todos)
-
+		app.data.todos = [...app.data.todos, todo.value]
+		todo.value = ''
 		app.render()
 	}
 
 	const submitHandler = function(event) {
 		event.preventDefault()
 
-		addTodo(todo.value)
+		if (event.target.matches('#add-todos')) {
+			addTodo(todo)
+		}
 	}
 
-	form.addEventListener('submit', submitHandler, false)
+	document.addEventListener('submit', submitHandler, false)
 
 	app.render()
 })()
