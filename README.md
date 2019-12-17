@@ -63,3 +63,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [31. Timer | Start and Pause Buttons](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/31-timer-start-and-pause-buttons/js/app.js)
 
 [32. Timer | Reactive Data](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/32-timer-reactive-data/js/app.js)
+
+[33. Todo List](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/33-todo-list/js/app.js)
