@@ -1,8 +1,6 @@
 ;(function() {
 	'use strict'
 
-	// Users should be able to mark items as complete (or uncheck them if they change their mind).
-
 	//
 	// Variables
 	//
@@ -13,7 +11,7 @@
 	//
 	const app = new Reef('#app', {
 		data: {
-			todos: ['Make coffe', 'Drink coffe', 'Listen to Koffee']
+			todos: []
 		},
 		template: function({ todos }) {
 			return '<ul>' + todos.map(todo => `<li>${todo}</li>`).join('') + '</ul>'
