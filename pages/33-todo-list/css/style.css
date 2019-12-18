@@ -13,20 +13,28 @@ label {
 	width: 100%;
 }
 
-ul {
-	padding-left: 0;
-	list-style: none;
-}
-
-li label {
-	display: inline;
-	line-height: 1.5em;
-}
-
 [type='checkbox'] {
 	margin-right: 0.5em;
 }
 
-[type='checkbox']:checked + label {
+.todos {
+	list-style: none;
+	margin: 0 0 1em;
+	padding: 0;
+}
+.todos li {
+	margin-bottom: 0.5em;
+}
+
+/**
+		 * @bugfix Prevent webkit from removing list semantics
+		 * 1. Add a non-breaking space
+		 * 2. Make sure it doesn't mess up the DOM flow
+		 */
+.todos li:before {
+	content: '\200B'; /* 1 */
+	position: absolute; /* 2 */
+}
+.todo-completed {
 	text-decoration: line-through;
 }
