@@ -19,7 +19,9 @@
 				todos
 					.map(
 						(todo, index) =>
-							`<li>${todo.text} <input id=${index} type="checkbox"></li>`
+							`<li><input id=${index} type="checkbox" ${
+								todo.completed ? 'checked' : ''
+							}><label for='${index}'>${todo.text}</label></li>`
 					)
 					.join('') +
 				'</ul>'

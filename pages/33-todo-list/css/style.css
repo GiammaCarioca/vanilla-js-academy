@@ -13,6 +13,20 @@ label {
 	width: 100%;
 }
 
+ul {
+	padding-left: 0;
+	list-style: none;
+}
+
+li label {
+	display: inline;
+	line-height: 1.5em;
+}
+
 [type='checkbox'] {
 	margin-right: 0.5em;
+}
+
+[type='checkbox']:checked + label {
+	text-decoration: line-through;
 }
