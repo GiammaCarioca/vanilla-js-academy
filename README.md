@@ -65,3 +65,5 @@ This repo is for the projects being done during the Fall 2019 session of the [Va
 [32. Timer | Reactive Data](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/32-timer-reactive-data/js/app.js)
 
 [33. Todo List](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/33-todo-list/js/app.js)
+
+[34. Todo List | Save and Delete](https://github.com/GiammaCarioca/vanilla-js-academy/blob/master/pages/34-todo-list-save-and-delete/js/app.js)
