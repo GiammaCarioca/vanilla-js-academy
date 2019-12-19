@@ -13,18 +13,20 @@
 	const newTodo = document.querySelector('#new-todo')
 
 	// Save the localStorage ID to a variable for easier configuration later
-	// var storageID = 'todos'
+	const storageID = 'todos'
 
 	//
 	// Methods
 	//
+
+	const loadTodos = () => JSON.parse(localStorage.getItem(storageID))
 
 	/**
 	 * Create a todo component
 	 */
 	const app = new Reef('#app', {
 		data: {
-			todos: []
+			todos: loadTodos() || []
 		},
 		template: function({ todos }) {
 			// If there are no todos, ask the user to add some
@@ -128,6 +130,9 @@
 		}
 	}
 
+	const saveTodos = () =>
+		localStorage.setItem(storageID, JSON.stringify(app.data.todos))
+
 	//
 	// Inits & Event Listeners
 	//
@@ -142,5 +147,5 @@
 	document.addEventListener('click', clickHandler, false)
 
 	// On render events, save todo items
-	// document.addEventListener('render', saveTodos, false)
+	document.addEventListener('render', saveTodos, false)
 })()
