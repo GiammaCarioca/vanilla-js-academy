@@ -41,7 +41,7 @@
 							`<li ${
 								todo.completed ? 'class="todo-completed"' : ''
 							}><label for='${index}'><input type="checkbox" id="todo-${index}" data-todo="${index}" ${
-								todo.completed ? 'checked' : ''
+								todo.completed ? 'checked=checked' : ''
 							}>${
 								todo.text
 							}</label><button data-delete-list="${index}" aria-label="Delete ${
@@ -99,7 +99,6 @@
 
 	const checkTodo = function(todo) {
 		if (!todo) return
-		console.log(todo)
 
 		// Get a copy of the todos
 		const todos = [...app.data.todos]
@@ -113,7 +112,6 @@
 
 		// Render fresh UI
 		app.setData({ todos: todos })
-		console.log(todo)
 	}
 
 	/**
