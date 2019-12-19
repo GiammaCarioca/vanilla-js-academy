@@ -40,3 +40,15 @@ label {
 .todo-completed {
 	text-decoration: line-through;
 }
+
+.todos button {
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	padding: 0;
+}
+
+.todos label {
+	display: inline;
+	margin-right: 0.5em;
+}

@@ -1,6 +1,10 @@
 ;(function() {
 	'use strict'
 
+	// Add the ability to delete specific todo items from the list.
+	// Automatically save the todo items whenever the user makes a change to their list.
+	// Automatically load the list into the UI when the user revisits the app.
+
 	//
 	// Variables
 	//
@@ -9,7 +13,7 @@
 	const newTodo = document.querySelector('#new-todo')
 
 	// Save the localStorage ID to a variable for easier configuration later
-	var storageID = 'todos'
+	// var storageID = 'todos'
 
 	//
 	// Methods
@@ -38,7 +42,11 @@
 								todo.completed ? 'class="todo-completed"' : ''
 							}><label for='${index}'><input type="checkbox" id="todo-${index}" data-todo="${index}" ${
 								todo.completed ? 'checked' : ''
-							}>${todo.text}</label></li>`
+							}>${
+								todo.text
+							}</label><button data-delete-list="${index}" aria-label="Delete ${
+								todo.text
+							}">🗑</button></li>`
 					)
 					.join('') +
 				'</ul>'
@@ -75,26 +83,51 @@
 		addTodo(newTodo)
 	}
 
+	const deleteTodo = function(todo) {
+		if (!todo) return
+
+		// Get a copy of the todos
+		const todos = [...app.data.todos]
+
+		const index = todo.getAttribute('data-delete-list')
+
+		todos.splice(index, 1)
+
+		// Render fresh UI
+		app.setData({ todos: todos })
+	}
+
+	const checkTodo = function(todo) {
+		if (!todo) return
+		console.log(todo)
+
+		// Get a copy of the todos
+		const todos = [...app.data.todos]
+
+		const index = todo.getAttribute('data-todo')
+
+		if (!todos[index]) return
+
+		// Update the todo state
+		todos[index].completed = todo.checked
+
+		// Render fresh UI
+		app.setData({ todos: todos })
+		console.log(todo)
+	}
+
 	/**
 	 * Handle click events
 	 * @param  {Event} event The Event object
 	 */
 	const clickHandler = function(e) {
-		// Only run on todo items
-		const todo = event.target.getAttribute('data-todo')
-		if (!todo) return
+		if (e.target.matches("input[type='checkbox']")) {
+			checkTodo(e.target)
+		}
 
-		// Get a copy of the todos
-		const todos = [...app.data.todos]
-		if (!todos[todo]) return
-
-		// Update the todo state
-		todos[todo].completed = e.target.checked
-
-		console.log(todos[todo])
-
-		// Render fresh UI
-		app.render()
+		if (e.target.matches('[data-delete-list]')) {
+			deleteTodo(e.target)
+		}
 	}
 
 	//
@@ -111,5 +144,5 @@
 	document.addEventListener('click', clickHandler, false)
 
 	// On render events, save todo items
-	document.addEventListener('render', saveTodos, false)
+	// document.addEventListener('render', saveTodos, false)
 })()
