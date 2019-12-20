@@ -1,10 +1,6 @@
 ;(function() {
 	'use strict'
 
-	// Add the ability to delete specific todo items from the list.
-	// Automatically save the todo items whenever the user makes a change to their list.
-	// Automatically load the list into the UI when the user revisits the app.
-
 	//
 	// Variables
 	//
@@ -57,6 +53,15 @@
 	})
 
 	const addTodo = function(todo) {
+		// checks whether an element is already on the list
+		const checkDuplicated = element => element.text === todo.value
+
+		if (app.data.todos.some(checkDuplicated)) {
+			alert(`Oops! ${todo.value} is already added to the list!`)
+			todo.focus()
+			return
+		}
+
 		// Get a copy of the todos and update data object
 		const todos = [...app.data.todos, { text: todo.value, completed: false }]
 
