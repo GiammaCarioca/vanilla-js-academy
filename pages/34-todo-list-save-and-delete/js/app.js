@@ -15,6 +15,9 @@
 	// Methods
 	//
 
+	/**
+	 * Check for saved data in localStorage
+	 */
 	const loadTodos = () => JSON.parse(localStorage.getItem(storageID))
 
 	/**
@@ -22,6 +25,7 @@
 	 */
 	const app = new Reef('#app', {
 		data: {
+			// Load todos into state on page load
 			todos: loadTodos() || []
 		},
 		template: function({ todos }) {
@@ -42,9 +46,9 @@
 								todo.completed ? 'checked=checked' : ''
 							}>${
 								todo.text
-							}</label><button data-delete-list="${index}" aria-label="Delete ${
+							}<button data-delete-todo="${index}" aria-label="Delete ${
 								todo.text
-							}">🗑</button></li>`
+							}">🗑</button></label></li>`
 					)
 					.join('') +
 				'</ul>'
@@ -56,8 +60,11 @@
 		// checks whether an element is already on the list
 		const checkDuplicated = element => element.text === todo.value
 
-		if (app.data.todos.some(checkDuplicated)) {
+		const { todos: todosList } = app.getData()
+
+		if (todosList.some(checkDuplicated)) {
 			alert(`Oops! ${todo.value} is already added to the list!`)
+			todo.value = ''
 			todo.focus()
 			return
 		}
@@ -77,12 +84,12 @@
 	 * Handle form submit events
 	 * @param  {Event} event The Event object
 	 */
-	const submitHandler = function(e) {
+	const submitHandler = function(event) {
 		// Only run for #add-todos form
-		if (e.target.id !== 'add-todos') return
+		if (event.target.id !== 'add-todos') return
 
 		// Stop the form from reloading the page
-		e.preventDefault()
+		event.preventDefault()
 
 		// If the #new-todo input has no value, do nothing
 		if (newTodo.value.length < 1) return
@@ -90,34 +97,51 @@
 		addTodo(newTodo)
 	}
 
-	const deleteTodo = function(todo) {
-		if (!todo) return
+	/**
+	 * Mark todo item as complete
+	 * @param  {Event} event The event object
+	 */
+	const completeTodo = function(event) {
+		// Only run on todo items
+		const todoIndex = event.target.getAttribute('data-todo')
+		if (!todoIndex) return
 
 		// Get a copy of the todos
 		const todos = [...app.data.todos]
+		if (!todos[todoIndex]) return
 
-		const index = todo.getAttribute('data-delete-list')
+		// Update the todo state
+		todos[todoIndex].completed = event.target.checked
 
-		todos.splice(index, 1)
-
-		// Render fresh UI
+		// Render a fresh UI
 		app.setData({ todos: todos })
 	}
 
-	const checkTodo = function(todo) {
-		if (!todo) return
+	/**
+	 * Delete a todo item from the list
+	 * @param  {Event} event The event object
+	 */
+	const deleteTodo = function(event) {
+		// Only run on delete button clicks
+		const todoIndex = event.target.getAttribute('data-delete-todo')
+		if (!todoIndex) return
 
 		// Get a copy of the todos
 		const todos = [...app.data.todos]
+		if (!todos[todoIndex]) return
 
-		const index = todo.getAttribute('data-todo')
+		// Confirm with the user before deleting
+		if (
+			!window.confirm(
+				'Are you sure you want to delete this todo item? This cannot be undone.'
+			)
+		)
+			return
 
-		if (!todos[index]) return
+		// Remove the item from the todo state
+		todos.splice(todoIndex, 1)
 
-		// Update the todo state
-		todos[index].completed = todo.checked
-
-		// Render fresh UI
+		// Render a fresh UI
 		app.setData({ todos: todos })
 	}
 
@@ -125,18 +149,22 @@
 	 * Handle click events
 	 * @param  {Event} event The Event object
 	 */
-	const clickHandler = function(e) {
-		if (e.target.matches("input[type='checkbox']")) {
-			checkTodo(e.target)
-		}
+	const clickHandler = function(event) {
+		// Mark todo item as complete
+		completeTodo(event)
 
-		if (e.target.matches('[data-delete-list]')) {
-			deleteTodo(e.target)
-		}
+		// Delete todo item
+		deleteTodo(event)
 	}
 
-	const saveTodos = () =>
-		localStorage.setItem(storageID, JSON.stringify(app.data.todos))
+	/**
+	 * Save todo items to localStorage
+	 */
+
+	const saveTodos = function() {
+		const { todos: todosList } = app.getData()
+		localStorage.setItem(storageID, JSON.stringify(todosList))
+	}
 
 	//
 	// Inits & Event Listeners

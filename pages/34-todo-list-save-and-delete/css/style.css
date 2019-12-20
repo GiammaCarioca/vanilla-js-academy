@@ -46,9 +46,5 @@ label {
 	border: 0;
 	cursor: pointer;
 	padding: 0;
-}
-
-.todos label {
-	display: inline;
-	margin-right: 0.5em;
+	margin-left: 0.5em;
 }
