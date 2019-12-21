@@ -1,0 +1,50 @@
+body {
+	margin: 1em auto;
+	max-width: 40em;
+	width: 88%;
+}
+
+form {
+	margin-bottom: 2em;
+}
+
+label {
+	display: block;
+	width: 100%;
+}
+
+[type='checkbox'] {
+	margin-right: 0.5em;
+}
+
+.todos {
+	list-style: none;
+	margin: 0 0 1em;
+	padding: 0;
+}
+
+.todos li {
+	margin-bottom: 0.5em;
+}
+
+/**
+ * @bugfix Prevent webkit from removing list semantics
+ * 1. Add a non-breaking space
+ * 2. Make sure it doesn't mess up the DOM flow
+ */
+.todos li:before {
+	content: '\200B'; /* 1 */
+	position: absolute; /* 2 */
+}
+
+.todo-completed {
+	text-decoration: line-through;
+}
+
+.todos button {
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	padding: 0;
+	margin-left: 0.5em;
+}
