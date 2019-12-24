@@ -17,12 +17,21 @@ label {
 	margin-right: 0.5em;
 }
 
+li button {
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	padding: 0;
+	margin-left: 0.5em;
+}
+
 .todos {
 	list-style: none;
 	margin: 0 0 1em;
 	padding: 0;
 }
 
+.lists li,
 .todos li {
 	margin-bottom: 0.5em;
 }
@@ -39,12 +48,4 @@ label {
 
 .todo-completed {
 	text-decoration: line-through;
-}
-
-.todos button {
-	background: transparent;
-	border: 0;
-	cursor: pointer;
-	padding: 0;
-	margin-left: 0.5em;
 }

@@ -5,86 +5,164 @@
 	// Variables
 	//
 
-	// The new todo input field
-	const newTodo = document.querySelector('#new-todo')
-
 	// Save the localStorage ID to a variable for easier configuration later
-	const storageID = 'todos'
+	const storageID = 'todosRouting'
+
+	// Placeholders
+	let app, field
 
 	//
 	// Methods
 	//
 
 	/**
-	 * Check for saved data in localStorage
+	 * Get the URL parameters
+	 * source: https://css-tricks.com/snippets/javascript/get-url-variables/
+	 * @param  {String} url The URL
+	 * @return {Object}     The URL parameters
 	 */
-	const loadTodos = () => JSON.parse(localStorage.getItem(storageID))
-
-	/**
-	 * Create a todo component
-	 */
-	const app = new Reef('#app', {
-		data: {
-			// Load todos into state on page load
-			todos: loadTodos() || []
-		},
-		template: function({ todos }) {
-			// If there are no todos, ask the user to add some
-			if (todos.length < 1) {
-				return "<p>You don't have any todos yet. Add some using the form above.</p>"
-			}
-
-			// Generate markup for todo items
-			return (
-				'<ul class="todos">' +
-				todos
-					.map(
-						(todo, index) =>
-							`<li ${
-								todo.completed ? 'class="todo-completed"' : ''
-							}><label for='${index}'><input type="checkbox" id="todo-${index}" data-todo="${index}" ${
-								todo.completed ? 'checked=checked' : ''
-							}>${
-								todo.text
-							}<button data-delete-todo="${index}" aria-label="Delete ${
-								todo.text
-							}">🗑</button></label></li>`
-					)
-					.join('') +
-				'</ul>'
-			)
+	const getParams = function(url) {
+		const params = {}
+		const parser = document.createElement('a')
+		parser.href = url ? url : window.location.href
+		const query = parser.search.substring(1)
+		const vars = query.split('&')
+		if (vars.length < 1 || vars[0].length < 1) return params
+		for (let i = 0; i < vars.length; i++) {
+			const pair = vars[i].split('=')
+			params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1])
 		}
-	})
-
-	const addTodo = function(todo) {
-		// checks whether an element is already on the list
-		const checkDuplicated = element => element.text === todo.value
-
-		const { todos: todosList } = app.getData()
-
-		if (todosList.some(checkDuplicated)) {
-			alert(`Oops! ${todo.value} is already added to the list!`)
-			todo.value = ''
-			todo.focus()
-			return
-		}
-
-		// Get a copy of the todos and update data object
-		const todos = [...app.data.todos, { text: todo.value, completed: false }]
-
-		// Render fresh UI
-		app.setData({ todos: todos })
-
-		// Clear the field and return focus
-		todo.value = ''
-		todo.focus()
+		return params
 	}
 
 	/**
-	 * Handle form submit events
+	 * Create todo lists view
+	 */
+	const createLists = function() {
+		app = new Reef('#app', {
+			data: {},
+			template: function(props) {
+				// Create the form
+				const form = `<h1>My Lists</h1>
+					<form id="add-lists">
+					<label for="new-list">Create a list</label>
+					<input type="text" id="new-list" autofocus>
+					<button>Create List</button>
+					</form>`
+
+				// If there are no lists, ask the user to create one
+				if (props.lists.length < 1) {
+					return (
+						form +
+						"<p>You don't have any lists yet. Create one using the form above.</p>"
+					)
+				}
+
+				// Generate markup for list items
+				return (
+					form +
+					'<ol class="lists">' +
+					props.lists
+						.map((list, index) => {
+							const todoHTML = `<li>
+								<a href="?list=${index}">${list.name} (${list.todos.length})</a> 
+								<button data-delete-list="${index}" aria-label="Delete ${list.name}">🗑</button>
+								</li>`
+							return todoHTML
+						})
+						.join('') +
+					'</ol>'
+				)
+			}
+		})
+	}
+
+	/**
+	 * Create todo items view
+	 */
+	const createTodos = function() {
+		app = new Reef('#app', {
+			data: {},
+			template: function(props) {
+				// Create a link back to the lists view
+				const link =
+					'<a href="' +
+					window.location.href.replace('?list=' + props.current, '') +
+					'">&larr; Back to Lists</a>'
+
+				// Get the current list
+				const list = props.lists[props.current]
+
+				// If the list doesn't exist, show a message and link back to all lists
+				if (!list) {
+					return link + '<h1>This list could not be found, sorry!</h1>'
+				}
+
+				// Create the form
+				const form =
+					link +
+					'<h1>' +
+					list.name +
+					'</h1>' +
+					'<form id="add-todos">' +
+					'<label for="new-todo">What do you want to do?</label>' +
+					'<input type="text" id="new-todo" autofocus>' +
+					'<button>Add Todo</button>' +
+					'</form>'
+
+				// If there are no todos, ask the user to add some
+				if (list.todos.length < 1) {
+					return (
+						form +
+						"<p>You don't have any todos yet. Add some using the form above.</p>"
+					)
+				}
+
+				// Generate markup for todo items
+				return (
+					form +
+					'<ul class="todos">' +
+					list.todos
+						.map((todo, index) => {
+							const todoHTML = `<li ${
+								todo.completed ? 'class="todo-completed"' : ''
+							}>
+								<label for="todo-${index}">
+								<input type="checkbox" id="todo-${index}" data-todo="${index}"
+								${todo.completed ? 'checked=checked' : ''}>${
+								todo.item
+							}<button data-delete-todo="${index}" aria-label="Delete ${
+								todo.item
+							}">🗑</button></label></li>`
+							return todoHTML
+						})
+						.join('') +
+					'</ul>'
+				)
+			}
+		})
+	}
+
+	/**
+	 * Clear the field and return focus
+	 */
+	const focusField = function() {
+		field.value = ''
+		field.focus()
+	}
+
+	/**
+	 * Check whether an element is already on the list
+	 */
+	const checkDuplicated = function(element) {
+		return element.name || element.item === field.value
+	}
+
+	/**
+	 * Add a new todo item to the app
 	 * @param  {Event} event The Event object
 	 */
-	const submitHandler = function(event) {
+	const addTodo = function(event) {
 		// Only run for #add-todos form
 		if (event.target.id !== 'add-todos') return
 
@@ -92,9 +170,79 @@
 		event.preventDefault()
 
 		// If the #new-todo input has no value, do nothing
-		if (newTodo.value.length < 1) return
+		if (field.value.length < 1) return
 
-		addTodo(newTodo)
+		// Get a copy of the data
+		const data = app.getData()
+
+		// Get the current list
+		const list = data.lists[data.current]
+		if (!list) return
+
+		// Check for duplicates
+		if (list.todos.some(checkDuplicated)) {
+			alert(`Oops! ${field.value} is already added to the list!`)
+
+			return focusField()
+		}
+
+		// Update data object
+		list.todos.push({
+			item: field.value,
+			completed: false
+		})
+
+		// Render fresh UI
+		app.setData({ lists: data.lists })
+
+		// Clear the field and return focus
+		focusField()
+	}
+
+	/**
+	 * Add a new list to the app
+	 * @param  {Event} event The Event object
+	 */
+	const addList = function(event) {
+		// Only run for #add-lists form
+		if (event.target.id !== 'add-lists') return
+
+		// Stop the form from reloading the page
+		event.preventDefault()
+
+		// If the #new-list input has no value, do nothing
+		if (field.value.length < 1) return
+
+		// Get a copy of the lists
+		const lists = app.getData().lists
+
+		// Check for duplicates
+		if (lists.some(checkDuplicated)) {
+			alert(`Oops! ${field.value} is already added to the list!`)
+
+			return focusField()
+		}
+
+		// Add the new list
+		lists.push({
+			name: field.value,
+			todos: []
+		})
+
+		// Render fresh UI
+		app.setData({ lists: lists })
+
+		// Clear the field and return focus
+		focusField()
+	}
+
+	/**
+	 * Handle form submit events
+	 * @param  {Event} event The Event object
+	 */
+	const submitHandler = function(event) {
+		addList(event)
+		addTodo(event)
 	}
 
 	/**
@@ -103,18 +251,21 @@
 	 */
 	const completeTodo = function(event) {
 		// Only run on todo items
-		const todoIndex = event.target.getAttribute('data-todo')
-		if (!todoIndex) return
+		const todo = event.target.getAttribute('data-todo')
+		if (!todo) return
 
-		// Get a copy of the todos
-		const todos = [...app.data.todos]
-		if (!todos[todoIndex]) return
+		// Get a copy of the data
+		const data = app.getData()
+
+		// Get the current list
+		const list = data.lists[data.current]
+		if (!list || !list.todos[todo]) return
 
 		// Update the todo state
-		todos[todoIndex].completed = event.target.checked
+		list.todos[todo].completed = event.target.checked
 
 		// Render a fresh UI
-		app.setData({ todos: todos })
+		app.setData({ lists: data.lists })
 	}
 
 	/**
@@ -123,12 +274,15 @@
 	 */
 	const deleteTodo = function(event) {
 		// Only run on delete button clicks
-		const todoIndex = event.target.getAttribute('data-delete-todo')
-		if (!todoIndex) return
+		const todo = event.target.getAttribute('data-delete-todo')
+		if (!todo) return
 
-		// Get a copy of the todos
-		const todos = [...app.data.todos]
-		if (!todos[todoIndex]) return
+		// Get a copy of the data
+		const data = app.getData()
+
+		// Get the current list
+		const list = data.lists[data.current]
+		if (!list || !list.todos[todo]) return
 
 		// Confirm with the user before deleting
 		if (
@@ -139,10 +293,38 @@
 			return
 
 		// Remove the item from the todo state
-		todos.splice(todoIndex, 1)
+		list.todos.splice(todo, 1)
 
 		// Render a fresh UI
-		app.setData({ todos: todos })
+		app.setData({ lists: data.lists })
+	}
+
+	/**
+	 * Delete a list
+	 * @param  {Event} event The event object
+	 */
+	const deleteList = function(event) {
+		// Only run on delete button clicks
+		const list = event.target.getAttribute('data-delete-list')
+		if (!list) return
+
+		// Get a copy of the data
+		const data = app.getData()
+		if (!data.lists[list]) return
+
+		// Confirm with the user before deleting
+		if (
+			!window.confirm(
+				`Are you sure you want to delete "${data.lists[list].name}"? All todo items associated with this list will also be deleted. This cannot be undone.`
+			)
+		)
+			return
+
+		// Remove the item from the todo state
+		data.lists.splice(list, 1)
+
+		// Render a fresh UI
+		app.setData({ lists: data.lists })
 	}
 
 	/**
@@ -155,6 +337,9 @@
 
 		// Delete todo item
 		deleteTodo(event)
+
+		// Delete list
+		deleteList(event)
 	}
 
 	/**
@@ -162,16 +347,57 @@
 	 */
 
 	const saveTodos = function() {
-		const { todos: todosList } = app.getData()
-		localStorage.setItem(storageID, JSON.stringify(todosList))
+		localStorage.setItem(storageID, JSON.stringify(app.getData()))
+	}
+
+	/**
+	 * Load todos into state on page load
+	 * @param {String} list The current list index
+	 */
+	const loadTodos = function(list) {
+		// Check for saved data in localStorage
+		const saved = localStorage.getItem(storageID)
+		const data = saved
+			? JSON.parse(saved)
+			: {
+					lists: []
+			  }
+		data.current = list ? parseInt(list, 10) : null
+
+		// Update the state and run an initial render
+		app.setData(data)
+	}
+
+	/**
+	 * Setup the UI
+	 */
+	const setup = function() {
+		// Get the list ID from the URL if there is one
+		const list = getParams().list
+
+		// If there's a list ID, create the todos view
+		// Otherwise, create the lists view
+		if (list) {
+			createTodos()
+		} else {
+			createLists()
+		}
+
+		// Render the initial UI
+		loadTodos(list)
+
+		// Define the field variable
+		// This will match against EITHER #new-list OR #new-todo, whichever it finds first
+		// This prevents me from having to conditionally set my selector
+		field = document.querySelector('#new-list, #new-todo')
 	}
 
 	//
 	// Inits & Event Listeners
 	//
 
-	// Render the initial UI
-	app.render()
+	// Setup the app view
+	setup()
 
 	// Listen for form submit events
 	document.addEventListener('submit', submitHandler, false)
