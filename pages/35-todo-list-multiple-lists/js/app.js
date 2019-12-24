@@ -41,7 +41,7 @@
 	const createLists = function() {
 		app = new Reef('#app', {
 			data: {},
-			template: function(props) {
+			template: function({ lists }) {
 				// Create the form
 				const form = `<h1>My Lists</h1>
 					<form id="add-lists">
@@ -51,7 +51,7 @@
 					</form>`
 
 				// If there are no lists, ask the user to create one
-				if (props.lists.length < 1) {
+				if (lists.length < 1) {
 					return (
 						form +
 						"<p>You don't have any lists yet. Create one using the form above.</p>"
@@ -62,7 +62,7 @@
 				return (
 					form +
 					'<ol class="lists">' +
-					props.lists
+					lists
 						.map((list, index) => {
 							const todoHTML = `<li>
 								<a href="?list=${index}">${list.name} (${list.todos.length})</a> 
@@ -83,15 +83,15 @@
 	const createTodos = function() {
 		app = new Reef('#app', {
 			data: {},
-			template: function(props) {
+			template: function({ lists, current }) {
 				// Create a link back to the lists view
 				const link =
 					'<a href="' +
-					window.location.href.replace('?list=' + props.current, '') +
+					window.location.href.replace('?list=' + current, '') +
 					'">&larr; Back to Lists</a>'
 
 				// Get the current list
-				const list = props.lists[props.current]
+				const list = lists[current]
 
 				// If the list doesn't exist, show a message and link back to all lists
 				if (!list) {
@@ -154,9 +154,8 @@
 	/**
 	 * Check whether an element is already on the list
 	 */
-	const checkDuplicated = function(element) {
-		return element.name || element.item === field.value
-	}
+	const checkDuplicated = element =>
+		element.name === field.value || element.item === field.value
 
 	/**
 	 * Add a new todo item to the app
@@ -172,11 +171,11 @@
 		// If the #new-todo input has no value, do nothing
 		if (field.value.length < 1) return
 
-		// Get a copy of the data
-		const data = app.getData()
+		// Get a copy of the data and then get lists and current with destructuring
+		const { lists, current } = app.getData()
 
 		// Get the current list
-		const list = data.lists[data.current]
+		const list = lists[current]
 		if (!list) return
 
 		// Check for duplicates
@@ -193,7 +192,7 @@
 		})
 
 		// Render fresh UI
-		app.setData({ lists: data.lists })
+		app.setData({ lists: lists })
 
 		// Clear the field and return focus
 		focusField()
@@ -213,8 +212,8 @@
 		// If the #new-list input has no value, do nothing
 		if (field.value.length < 1) return
 
-		// Get a copy of the lists
-		const lists = app.getData().lists
+		// Get a copy of the lists from data with destructuring
+		const { lists } = app.getData()
 
 		// Check for duplicates
 		if (lists.some(checkDuplicated)) {
@@ -254,18 +253,18 @@
 		const todo = event.target.getAttribute('data-todo')
 		if (!todo) return
 
-		// Get a copy of the data
-		const data = app.getData()
+		// Get a copy of the data and then get lists and current with destructuring
+		const { lists, current } = app.getData()
 
 		// Get the current list
-		const list = data.lists[data.current]
+		const list = lists[current]
 		if (!list || !list.todos[todo]) return
 
 		// Update the todo state
 		list.todos[todo].completed = event.target.checked
 
 		// Render a fresh UI
-		app.setData({ lists: data.lists })
+		app.setData({ lists: lists })
 	}
 
 	/**
@@ -277,11 +276,11 @@
 		const todo = event.target.getAttribute('data-delete-todo')
 		if (!todo) return
 
-		// Get a copy of the data
-		const data = app.getData()
+		// Get a copy of the data and then get lists and current with destructuring
+		const { lists, current } = app.getData()
 
 		// Get the current list
-		const list = data.lists[data.current]
+		const list = lists[current]
 		if (!list || !list.todos[todo]) return
 
 		// Confirm with the user before deleting
@@ -296,7 +295,7 @@
 		list.todos.splice(todo, 1)
 
 		// Render a fresh UI
-		app.setData({ lists: data.lists })
+		app.setData({ lists: lists })
 	}
 
 	/**
@@ -308,23 +307,23 @@
 		const list = event.target.getAttribute('data-delete-list')
 		if (!list) return
 
-		// Get a copy of the data
-		const data = app.getData()
-		if (!data.lists[list]) return
+		// Get a copy of the data and then get lists with destructuring
+		const { lists } = app.getData()
+		if (!lists[list]) return
 
 		// Confirm with the user before deleting
 		if (
 			!window.confirm(
-				`Are you sure you want to delete "${data.lists[list].name}"? All todo items associated with this list will also be deleted. This cannot be undone.`
+				`Are you sure you want to delete "${lists[list].name}"? All todo items associated with this list will also be deleted. This cannot be undone.`
 			)
 		)
 			return
 
 		// Remove the item from the todo state
-		data.lists.splice(list, 1)
+		lists.splice(list, 1)
 
 		// Render a fresh UI
-		app.setData({ lists: data.lists })
+		app.setData({ lists: lists })
 	}
 
 	/**
